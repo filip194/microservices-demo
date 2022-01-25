@@ -1,0 +1,4 @@
+[submodule "config-server-repository"]
+	path = config-server-repository
+	url = https://github.com/filip194/config-server-repository
+
