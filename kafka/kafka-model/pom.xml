@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>microservices-demo</artifactId>
+        <groupId>com.microservices.demo</groupId>
+        <version>1.0.0-MICROSERVICES-DEMO</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--    This submodule will create and hold Avro model that will hold the data that will be inserted into Kafka-->
+    <!--    Avro is an opensource data serialization system that helps with data exchange between different systems. It has a schema and efficient byte serialization.-->
+    <!--    With Avro we don't have to keep names as in JSON, and it also has direct mapping to and from JSON.-->
+    <!--    Because of this properties it is more compact and faster for data communication. That's way it is the preferred way in Kafka world. -->
+    <!--    Avro files have .avsc suffix.-->
+
+    <artifactId>kafka-model</artifactId>
+    <description>Module to create and hold Java objects for Kafka in Avro format</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <configuration>
+                    <!-- By default, text is converted to characters (CharSequence) from Avro schema, but we want to create Java String-->
+                    <stringType>String</stringType>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

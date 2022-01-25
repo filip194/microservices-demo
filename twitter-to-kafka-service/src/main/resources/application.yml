@@ -1,0 +1,14 @@
+# properties placed here will override properties from config-server-repository
+
+# once these were bootstrap.yml properties
+spring:
+  application:
+    name: twitter-to-kafka-service
+  profiles:
+    active: twitter_to_kafka # from config-client-twitter_to_kafka
+  config:
+    import: 'configserver:' # since I do not set URI here, it will default to http://localhost:8888, so if it's not available application startup will fail
+  cloud:
+    config:
+      name: twitter-to-kafka-service,config-client # we use this prefix 'config-client' in config-server-repository
+      #uri: http://localhost:8888 # deprecated in favor of spring.config.import
