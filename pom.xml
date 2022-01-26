@@ -35,6 +35,8 @@
 
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
 
+        <javax-annotaion-api.version>1.3.2</javax-annotaion-api.version>
+
         <twitter4j-stream.version>4.0.7</twitter4j-stream.version>
 
         <lombok.version>1.18.22</lombok.version>
@@ -118,8 +120,12 @@
                 <version>${spring-retry.version}</version>
             </dependency>
 
-
             <!--3PP-->
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>${javax-annotaion-api.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.twitter4j</groupId>
                 <artifactId>twitter4j-stream</artifactId>
