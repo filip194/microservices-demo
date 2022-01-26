@@ -11,10 +11,20 @@ spring:
           uri: https://github.com/filip194/config-server-repository
           default-label: master # this is branch name that will be used to get configuration data, GitHub by default now uses 'main' so this might have to be set manually, otherwise Spring Boot will set this label to 'master' by default
           username: filip194
-          password:  # should not use password directly, create token at github page: https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
+          password: ENC(Yvh9CCPUCM+M13cOFoatmcI7NHEzlGGq6OOkPcgD6TTTZVJbOwsKFxZ8QZ/xFdwvQ8n5y2zm8lndmIWIcDaCOBFzaSSpWHqxVszDULT+qSI=) # should not use password (token, from GitHub) directly, create token at github page: https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
           #uri: file://home/efildra/microservices-demo/config-server-repository # not a good practice
           clone-on-start: true
     fail-fast: true
+  security:
+    user: # we will have to add this to twitter_to_kafka_service as this config data will be propagated to that service
+      name: spring_cloud_user
+      password: ENC(GXFqfSgiXMS2NkidF+2vVC5KBQcmBycshGsx4MIeGlrEL+2heNRzejcWu4fivs1OuOpSFq/Ri2ep5VwEB7LMbA==)
+      # use ENC() to tell spring boot jasypt that inside is encrypted password (springCloud_Pwd!)
+
+# added in IntelliJ program arguments as -Djasypt.encryptor.password=Demo_Pwd!2022, or can be added as env variable and included as ${JASYPT_ENCRYPTOR_PASSWORD}
+#jasypt:
+#  encryptor:
+#    password: Demo_Pwd!2022
 
 logging:
   level:

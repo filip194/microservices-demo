@@ -19,6 +19,7 @@
         <module>kafka/kafka-model</module>
         <module>kafka/kafka-producer</module>
         <module>twitter-to-kafka-service</module>
+        <!--<module>playground</module>--> <!--this module will not be used for the application-->
     </modules>
 
 
@@ -65,6 +66,8 @@
         <micrometer-registry-prometheus.version>1.8.2</micrometer-registry-prometheus.version>
 
         <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
+
+        <jasypt-spring-boot-starter.version>3.0.4</jasypt-spring-boot-starter.version>
     </properties>
 
 
@@ -88,6 +91,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
@@ -142,6 +150,11 @@
                 <groupId>io.confluent</groupId>
                 <artifactId>kafka-avro-serializer</artifactId>
                 <version>${kafka-avro-serializer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt-spring-boot-starter.version}</version>
             </dependency>
 
 

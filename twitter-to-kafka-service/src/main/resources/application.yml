@@ -7,8 +7,17 @@ spring:
   profiles:
     active: twitter_to_kafka # from config-client-twitter_to_kafka
   config:
-    import: 'configserver:' # since I do not set URI here, it will default to http://localhost:8888, so if it's not available application startup will fail
+    import: 'configserver:' # since I do not set URI here, it will default to http://localhost:8888, so if it's not available, application startup will fail
   cloud:
     config:
       name: twitter-to-kafka-service,config-client # we use this prefix 'config-client' in config-server-repository
       #uri: http://localhost:8888 # deprecated in favor of spring.config.import
+      username: spring_cloud_user
+#      password: springCloud_Pwd!
+      password: ENC(cZ2MK+P6ngA0JdBawFjw1b1EEkeCb9+FXThDVN2piTfu6HVRqHmJZTdcv8AzKY42UxvnsF0PEU6/eug4noIStw==)
+      # use ENC() to tell spring boot jasypt that inside is encrypted password (springCloud_Pwd!)
+
+# added in IntelliJ program arguments as -Djasypt.encryptor.password=Demo_Pwd!2022, or can be added as env variable: export JASYPT_ENCRYPTOR_PASSWORD='Demo_Pwd!2022'
+#jasypt:
+#  encryptor:
+#    password: ${JASYPT_ENCRYPTOR_PASSWORD}
