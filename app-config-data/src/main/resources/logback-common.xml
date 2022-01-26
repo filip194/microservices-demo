@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<included>
 <!--    these properties are not common and will change for each service with different value-->
 <!--    <property name="DEV_HOME" value="./twitter-to-kafka-service/logs"/>-->
 <!--    <property name="APP_NAME" value="twitter-to-kafka-service"/>-->
@@ -48,4 +48,4 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-</configuration>
+</included>
