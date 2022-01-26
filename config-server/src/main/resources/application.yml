@@ -15,6 +15,10 @@ spring:
           #uri: file://home/efildra/microservices-demo/config-server-repository # not a good practice
           clone-on-start: true
     fail-fast: true
+  security:
+    user: # we will have to add this to twitter_to_kafka_service as this config data will be propagated to that service
+      name: spring_cloud_user
+      password: springCloud_Pwd!
 
 logging:
   level:
