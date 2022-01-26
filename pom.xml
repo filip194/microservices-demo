@@ -33,6 +33,8 @@
     <properties>
         <java.version>11</java.version>
 
+        <maven.compiler.verbose>true</maven.compiler.verbose>
+
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
 
         <javax-annotaion-api.version>1.3.2</javax-annotaion-api.version>
