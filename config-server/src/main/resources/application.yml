@@ -11,14 +11,14 @@ spring:
           uri: https://github.com/filip194/config-server-repository
           default-label: master # this is branch name that will be used to get configuration data, GitHub by default now uses 'main' so this might have to be set manually, otherwise Spring Boot will set this label to 'master' by default
           username: filip194
-          password:  # should not use password directly, create token at github page: https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
+          password: '{cipher}94f72c9365fb8362176a931ce56f581dcda0c7cf257dc1a0019a16be9f1101047024f7a45a8930b710a785861321578f3098558078b572d5144fd56bb8ff4334' # should not use password directly, create token at github page: https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
           #uri: file://home/efildra/microservices-demo/config-server-repository # not a good practice
           clone-on-start: true
     fail-fast: true
   security:
     user: # we will have to add this to twitter_to_kafka_service as this config data will be propagated to that service
       name: spring_cloud_user
-      password: springCloud_Pwd!
+      password: '{cipher}9489a39e828040279ad07347e61e0d23c5326e1363436020e2a7b6b790b9f4805c1d9d62e23a0147e050f2086cb4f8ce'
 
 logging:
   level:
