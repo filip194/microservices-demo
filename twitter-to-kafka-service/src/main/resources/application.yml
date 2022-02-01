@@ -14,7 +14,7 @@ spring:
       #uri: http://localhost:8888 # deprecated in favor of spring.config.import
       username: spring_cloud_user
 #      password: springCloud_Pwd!
-      password: ENC(cZ2MK+P6ngA0JdBawFjw1b1EEkeCb9+FXThDVN2piTfu6HVRqHmJZTdcv8AzKY42UxvnsF0PEU6/eug4noIStw==)
+      password: ENC(cZ2MK+P6ngA0JdBawFjw1b1EEkeCb9+FXThDVN2piTfu6HVRqHmJZTdcv8AzKY42UxvnsF0PEU6/eug4noIStw==) # this will not work with Jasypt version 3.0.4 and Spring Cloud version 3.1.0 -> Jasypt doesn't decrypt properties on time before starting other services, might be it expects bootstrap.yml file form older version of Spring Cloud
       # use ENC() to tell spring boot jasypt that inside is encrypted password (springCloud_Pwd!)
 
 # added in IntelliJ program arguments as -Djasypt.encryptor.password=Demo_Pwd!2022, or can be added as env variable: export JASYPT_ENCRYPTOR_PASSWORD='Demo_Pwd!2022'
