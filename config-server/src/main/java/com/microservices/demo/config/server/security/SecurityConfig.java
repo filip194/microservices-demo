@@ -12,6 +12,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     {
         // disabling authentication for simplicity...
         web.ignoring()
+                .antMatchers("/actuator/**")
                 .antMatchers("/encrypt/**")
                 .antMatchers("/decrypt/**");
         super.configure(web);
