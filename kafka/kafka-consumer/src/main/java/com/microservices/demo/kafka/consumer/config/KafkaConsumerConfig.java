@@ -18,13 +18,10 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import com.microservices.demo.config.KafkaConfigData;
 import com.microservices.demo.config.KafkaConsumerConfigData;
 
-/*
+// @EnableKafka - enables detection of Kafka listener annotation
+// Spring Boot - it can be skipped as Spring Boot will automatically enable this annotation
+// Spring - must be used to detect of Kafka listener(s)
 @EnableKafka
-- enables detection of Kafka listener annotation
-Spring Boot - it can be skipped as Spring Boot will automatically enable this annotation
-Spring - must be used to detect of Kafka listener(s)
- */
-@EnableKafka // enables detection of Kafka listener annotation
 @Configuration
 public class KafkaConsumerConfig<K extends Serializable, V extends SpecificRecordBase>
 {

@@ -1,6 +1,6 @@
 # properties placed here will override properties from config-server-repository
 
-# once these were bootstrap.yml properties
+# once these were in bootstrap.yml properties
 spring:
   application:
     name: twitter-to-kafka-service
