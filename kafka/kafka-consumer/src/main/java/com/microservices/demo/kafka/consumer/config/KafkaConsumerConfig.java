@@ -88,9 +88,13 @@ What should be the kafka consumer concurrency level for maximum concurrency and 
         factory.setConcurrency(
                 kafkaConsumerConfigData.getConcurrencyLevel()); // Spring Boot will create that much threads when consuming data, this should be equal to partition number
         factory.setAutoStartup(
-                kafkaConsumerConfigData.getAutoStartup()); // auto-startup: we want to start immediately when application starts, or we will trigger the start later
-        factory.getContainerProperties().setPollTimeout(
-                kafkaConsumerConfigData.getPollTimeoutMs()); // this timeout determines how long we will wait until at least one record is available when we call the poll method
+                kafkaConsumerConfigData.getAutoStartup()); // auto-startup: we want to start listening immediately when application starts, or we will trigger the start later
+        factory.getContainerProperties().setPollTimeout(kafkaConsumerConfigData.getPollTimeoutMs());
+        /* poll timeout determines how long we will wait until at least one record is available when we call the poll method on consumer; to optimize it, having a value around 100ms is recommended
+         * it will wait in the poll method of the Kafka consumer this amount of time for the new records
+         * setting this value TOO HIGH will block consuming in reasonable amount of time, and ...
+         * setting this value TOO LOW will cause CPU stall (cpu will be checking for new records most of the time)
+         */
 
         return factory;
     }
