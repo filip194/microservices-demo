@@ -1,0 +1,66 @@
+version: '3.8'
+services: # we have 3 elastic nodes as we have 3 in kafka cluster
+  elastic-1:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest} # using official elasticsearch docker image
+    hostname: elastic-1
+    environment:
+      - node.name=elastic-1
+      - cluster.name=es-twitter-cluster # each node must have the same cluster name to belong to that cluster
+      - discovery.seed_hosts=elastic-2,elastic-3 # discovery of other nodes
+      - cluster.initial_master_nodes=elastic-1,elastic-2,elastic-3 # any 2 nodes can be chosen as te master nodes
+      - bootstrap.memory_lock=true # THIS IS NECESSARY TO PREVENT MEMORY SWAPPING -> deteriorates performance and makes system unusable
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits: # these setting enable elasticsearch to lock memory as stated above
+      memlock:
+        soft: -1
+        hard: -1
+    volumes: # to keep data persistence after restarting this file
+      - data01_7_15_2:/usr/share/elasticsearch/data
+    ports: # ports set only for elastic-1 node which is enough to reach this cluster from outside of container
+      - "9200:9200"
+    networks: # network set from .env file as for other services so docker images can communicate one with another
+      - ${GLOBAL_NETWORK:-elastic}
+  elastic-2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest}
+    hostname: elastic-2
+    environment:
+      - node.name=elastic-2
+      - cluster.name=es-twitter-cluster
+      - discovery.seed_hosts=elastic-1,elastic-3
+      - cluster.initial_master_nodes=elastic-1,elastic-2,elastic-3
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02_7_15_2:/usr/share/elasticsearch/data
+    networks:
+      - ${GLOBAL_NETWORK:-elastic}
+  elastic-3:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest}
+    hostname: elastic-3
+    environment:
+      - node.name=elastic-3
+      - cluster.name=es-twitter-cluster
+      - discovery.seed_hosts=elastic-2,elastic-3
+      - cluster.initial_master_nodes=elastic-1,elastic-2,elastic-3
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03_7_15_3:/usr/share/elasticsearch/data
+    networks:
+      - ${GLOBAL_NETWORK:-elastic}
+
+volumes:
+  data01_7_15_2:
+    driver: local
+  data02_7_15_2:
+    driver: local
+  data03_7_15_3:
+    driver: local
