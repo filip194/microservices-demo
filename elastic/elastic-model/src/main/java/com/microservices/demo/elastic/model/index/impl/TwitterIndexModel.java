@@ -1,6 +1,6 @@
 package com.microservices.demo.elastic.model.index.impl;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -16,7 +16,8 @@ import lombok.Data;
 @Data
 @Builder
 // Spring expression language (SpEL) to get index-name "twitter-index" defined in configuration
-@Document(indexName = "#{elasticConfigData.indexName}")
+// If the evaluation context has been configured with a bean resolver, you can look up beans from an expression by using the '@' symbol
+@Document(indexName = "#{@elasticConfigData.indexName}")
 public class TwitterIndexModel implements IndexModel
 {
     @JsonProperty
@@ -35,7 +36,7 @@ public class TwitterIndexModel implements IndexModel
     @JsonProperty
     // required while parsing a JSON to this object
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "uuuu-MM-dd'T'HH:mm:ssZZ")
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
 }
 
