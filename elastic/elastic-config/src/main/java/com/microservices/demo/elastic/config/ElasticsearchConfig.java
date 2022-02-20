@@ -40,7 +40,7 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration
                         .setSocketTimeout(elasticConfigData.getSocketTimeoutMs())));
     }
 
-    // used with ElasticsearchRepository class; provides convenient persistence methods to ease development
+    // used with ElasticsearchRepository class; provides convenient persistence methods to ease development; must be called elasticsearchOperations()
     @Bean
     public ElasticsearchOperations elasticsearchOperations()
     {

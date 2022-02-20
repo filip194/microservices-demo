@@ -21,7 +21,10 @@ public class ElasticIndexUtil<T extends IndexModel>
     public List<IndexQuery> getIndexQueries(List<T> documents)
     {
         return documents.stream()
-                .map(document -> new IndexQueryBuilder().withId(document.getId()).withObject(document).build())
+                .map(document -> new IndexQueryBuilder()
+                        .withId(document.getId())
+                        .withObject(document)
+                        .build())
                 .collect(Collectors.toList());
     }
 }
