@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.microservices.demo.config.KafkaConfigData;
@@ -22,6 +21,7 @@ import com.microservices.demo.config.RetryConfigData;
 import com.microservices.demo.kafka.admin.exception.KafkaClientException;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -105,12 +105,17 @@ public class KafkaAdminClient
     {
         try
         {
-            return webClient
-                    .method(HttpMethod.GET)
-                    .uri(kafkaConfigData.getSchemaRegistryUrl())
-                    .exchange()
-                    .map(ClientResponse::statusCode)
-                    .block();
+            return webClient.method(HttpMethod.GET).uri(kafkaConfigData.getSchemaRegistryUrl())
+                    .exchangeToMono(response -> {
+                        if (response.statusCode().is2xxSuccessful())
+                        {
+                            return Mono.just(response.statusCode());
+                        }
+                        else
+                        {
+                            return Mono.just(HttpStatus.SERVICE_UNAVAILABLE);
+                        }
+                    }).block();
         }
         catch (Exception e)
         {
