@@ -39,7 +39,7 @@ public class TwitterElasticRepositoryIndexClient implements ElasticIndexClient<T
         final List<String> ids = repositoryResponse.stream().map(TwitterIndexModel::getId).collect(Collectors.toList());
         log.info("Documents indexed successfully with type: {} and IDs: {}",
                 TwitterElasticRepositoryIndexClient.class.getName(), ids);
-        return null;
+        return ids;
     }
 }
 

@@ -21,8 +21,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     networks: # network set from .env file as for other services so docker images can communicate one with another
       - ${GLOBAL_NETWORK:-elastic}
   elastic-2:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest}
-    hostname: elastic-2
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     environment:
       - node.name=elastic-2
       - cluster.name=es-twitter-cluster
@@ -39,12 +38,11 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     networks:
       - ${GLOBAL_NETWORK:-elastic}
   elastic-3:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest}
-    hostname: elastic-3
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     environment:
       - node.name=elastic-3
       - cluster.name=es-twitter-cluster
-      - discovery.seed_hosts=elastic-2,elastic-3
+      - discovery.seed_hosts=elastic-1,elastic-2
       - cluster.initial_master_nodes=elastic-1,elastic-2,elastic-3
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -53,7 +51,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
         soft: -1
         hard: -1
     volumes:
-      - data03_7_15_3:/usr/share/elasticsearch/data
+      - data03_7_15_2:/usr/share/elasticsearch/data
     networks:
       - ${GLOBAL_NETWORK:-elastic}
 
@@ -62,5 +60,5 @@ volumes:
     driver: local
   data02_7_15_2:
     driver: local
-  data03_7_15_3:
+  data03_7_15_2:
     driver: local
