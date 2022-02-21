@@ -11,7 +11,7 @@ spring:
           uri: https://github.com/filip194/config-server-repository
           default-label: master # this is branch name that will be used to get configuration data, GitHub by default now uses 'main' so this might have to be set manually, otherwise Spring Boot will set this label to 'master' by default
           username: filip194
-          password: '{cipher}94f72c9365fb8362176a931ce56f581dcda0c7cf257dc1a0019a16be9f1101047024f7a45a8930b710a785861321578f3098558078b572d5144fd56bb8ff4334' # should not use password directly, create token at github page: https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
+          password: '{cipher}4a9fe7e5fa5bc7812da89b0c72151258c3d96b2ec803eba956be31ac512f01ca6df5ed80a6df9908757be9bbe182e71dbbe1f0592fb6cc9ab68bc194ebb0d065' # should not use password directly, create token at github page: https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/
           #uri: file://home/efildra/microservices-demo/config-server-repository # not a good practice
           clone-on-start: true
     fail-fast: true
