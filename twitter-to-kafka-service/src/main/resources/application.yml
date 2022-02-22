@@ -11,6 +11,6 @@ spring:
   cloud:
     config:
       name: twitter-to-kafka-service,config-client # we use this prefix 'config-client' in config-server-repository
-      #uri: http://localhost:8888 # deprecated in favor of spring.config.import
+      #uri: http://localhost:8888 # deprecated in favor of spring.config.import from Spring Boot 2.4.0
       username: spring_cloud_user
       password: '{cipher}63809f7c2e325bfacd41e85c52790527b0e0a8177871d424f73f1378dca18fab6b5b31b176eb89643541207ab0dd5901'

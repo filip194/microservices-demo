@@ -63,10 +63,26 @@
 
     <build>
         <plugins>
-            <!--enable building runnable jar file-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>${project.groupId}/kafka.to.elastic.service:${project.version}</name>
+                    </image>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <!-- spring boot build-image follows layered approach to prevent two overheads:-->
+                        <!--    1) prevents creating single fat jar-->
+                        <!--    2) uses caching during image update, so it doesn't have to update the whole jar-->
+                        <!-- This is achieved by Cloud Native Buildpacks (buildpacks.io)-->
+                        <goals>
+                            <goal>build-image</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
