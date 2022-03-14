@@ -18,7 +18,7 @@ import com.microservices.demo.config.ElasticConfigData;
 
 @Configuration
 // required for Spring to scan and find elasticsearch repositories
-@EnableElasticsearchRepositories(basePackages = "com.microservices.demo.elastic.index.client.repository")
+@EnableElasticsearchRepositories(basePackages = "com.microservices.demo.elastic")
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration
 {
     private final ElasticConfigData elasticConfigData;
