@@ -5,7 +5,7 @@ spring:
   application:
     name: elastic-query-service
   profiles:
-    active: elastic_query # from config-client-kafka_to_elastic
+    active: elastic_query # from config-client-elastic_query
   config:
     import: 'configserver:' # since I do not set URI here, it will default to http://localhost:8888, so if it's not available application startup will fail
   cloud:
