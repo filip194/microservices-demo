@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * elastic-query-service will be used as query components in CQRS pattern
+ * elastic-query-service will be used as query component in CQRS pattern
  */
 @SpringBootApplication
 @ComponentScan(basePackages = "com.microservices.demo")
