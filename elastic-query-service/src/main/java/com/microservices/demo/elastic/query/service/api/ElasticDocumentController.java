@@ -2,6 +2,9 @@ package com.microservices.demo.elastic.query.service.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +44,7 @@ public class ElasticDocumentController
 
     @GetMapping("/{id}")
     public @ResponseBody
-    ResponseEntity<ElasticQueryServiceResponseModel> getDocumentById(@PathVariable String id)
+    ResponseEntity<ElasticQueryServiceResponseModel> getDocumentById(@PathVariable @NotEmpty String id)
     {
         final ElasticQueryServiceResponseModel elasticQueryServiceResponseModel = elasticQueryService.getDocumentById(
                 id);
@@ -52,7 +55,7 @@ public class ElasticDocumentController
     @PostMapping("/get-document-by-text")
     public @ResponseBody
     ResponseEntity<List<ElasticQueryServiceResponseModel>> getDocumentByText(
-            @RequestBody ElasticQueryServiceRequestModel elasticQueryServiceRequestModel)
+            @RequestBody @Valid ElasticQueryServiceRequestModel elasticQueryServiceRequestModel)
     {
         final List<ElasticQueryServiceResponseModel> response = elasticQueryService.getDocumentByText(
                 elasticQueryServiceRequestModel.getText());
