@@ -8,7 +8,7 @@ import com.microservices.demo.elastic.model.index.impl.TwitterIndexModel;
 import com.microservices.demo.elastic.query.client.service.ElasticQueryClient;
 import com.microservices.demo.elastic.query.service.business.ElasticQueryService;
 import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceResponseModel;
-import com.microservices.demo.elastic.query.service.transformer.ElasticToResponseModelTransformer;
+import com.microservices.demo.elastic.query.service.model.assembler.ElasticQueryServiceResponseModelAssembler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,13 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TwitterElasticQueryService implements ElasticQueryService
 {
-    private final ElasticToResponseModelTransformer elasticToResponseModelTransformer;
+    private final ElasticQueryServiceResponseModelAssembler elasticQueryServiceResponseModelAssembler;
     private final ElasticQueryClient<TwitterIndexModel> elasticQueryClient;
 
-    public TwitterElasticQueryService(ElasticToResponseModelTransformer elasticToResponseModelTransformer,
+    public TwitterElasticQueryService(
+            ElasticQueryServiceResponseModelAssembler elasticQueryServiceResponseModelAssembler,
             ElasticQueryClient<TwitterIndexModel> elasticQueryClient)
     {
-        this.elasticToResponseModelTransformer = elasticToResponseModelTransformer;
+        this.elasticQueryServiceResponseModelAssembler = elasticQueryServiceResponseModelAssembler;
         this.elasticQueryClient = elasticQueryClient;
     }
 
@@ -30,21 +31,21 @@ public class TwitterElasticQueryService implements ElasticQueryService
     public ElasticQueryServiceResponseModel getDocumentById(String id)
     {
         log.info("Querying elasticsearch by id {}", id);
-        return elasticToResponseModelTransformer.getResponseModel(elasticQueryClient.getIndexModelById(id));
+        return elasticQueryServiceResponseModelAssembler.toModel(elasticQueryClient.getIndexModelById(id));
     }
 
     @Override
     public List<ElasticQueryServiceResponseModel> getDocumentByText(String text)
     {
         log.info("Querying elasticsearch by text {}", text);
-        return elasticToResponseModelTransformer.getResponseModels(elasticQueryClient.getIndexModelByText(text));
+        return elasticQueryServiceResponseModelAssembler.toModels(elasticQueryClient.getIndexModelByText(text));
     }
 
     @Override
     public List<ElasticQueryServiceResponseModel> getAllDocuments()
     {
         log.info("Querying all documents in elasticsearch");
-        return elasticToResponseModelTransformer.getResponseModels(elasticQueryClient.getAllIndexModels());
+        return elasticQueryServiceResponseModelAssembler.toModels(elasticQueryClient.getAllIndexModels());
     }
 }
 

@@ -2,6 +2,8 @@ package com.microservices.demo.elastic.query.service.model;
 
 import java.time.ZonedDateTime;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticQueryServiceResponseModel
+// RepresentationModel is used to add _links of HATEOAS API development principle
+public class ElasticQueryServiceResponseModel extends RepresentationModel<ElasticQueryServiceResponseModel>
 {
     private String id;
     private Long userId;

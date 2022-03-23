@@ -33,7 +33,7 @@ public class ElasticDocumentController
         this.elasticQueryService = elasticQueryService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public @ResponseBody
     ResponseEntity<List<ElasticQueryServiceResponseModel>> getAllDocuments()
     {
