@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         auth.inMemoryAuthentication()
                 .withUser(userConfigData.getUsername())
-                .password(userConfigData.getPassword()) // noop option, use password as clear text
+                .password(passwordEncoder().encode(userConfigData.getPassword())) // noop option, use password as clear text
                 .roles(userConfigData.getRoles());
     }
 
