@@ -30,21 +30,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.httpBasic().and().authorizeRequests().antMatchers("/**").hasRole("USER").and().csrf().disable();
+        http.httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**").hasRole("USER")
+                .and()
+                .csrf().disable();
     }
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception
     {
-        webSecurity.ignoring().antMatchers(pathsToIgnore);
+       webSecurity
+               .ignoring()
+               .antMatchers(pathsToIgnore);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
-        auth.inMemoryAuthentication().withUser(userConfigData.getUsername()).password(
-                        passwordEncoder().encode(userConfigData.getPassword())) // noop option, use password as clear
-                // text
+        auth.inMemoryAuthentication()
+                .withUser(userConfigData.getUsername())
+                .password(passwordEncoder().encode(userConfigData.getPassword())) // noop option, use password as clear text
                 .roles(userConfigData.getRoles());
     }
 
