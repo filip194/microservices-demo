@@ -8,7 +8,7 @@ services:
       - "./docker-logs:/workspace/twitter-to-kafka-service/logs"
       - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
     user: root
-    entrypoint: ["check-config-server-started.sh"] # execute this script as a first thing when container starts
+    entrypoint: [ "check-config-server-started.sh" ] # execute this script as a first thing when container starts
     depends_on: # docker-compose option that sets ordering between containers
       - config-server
     environment:
@@ -66,6 +66,34 @@ services:
       - "./docker-logs:/workspace/config-server/logs" # /workspace/config-server/logs directory structure inside container built by build-image maven plugin
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007 -Xms128m -Xmx256m"
+      - "ENCRYPT_KEY=${ENCRYPT_KEY}"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+  elastic-query-service:
+    image: ${GROUP_ID}/elastic.query.service:${SERVICE_VERSION:-latest}
+    ports:
+      - "5008:5008"
+      - "8183:8183"
+    volumes:
+      - "./docker-logs:/workspace/elastic-query-service/logs"
+      - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
+    user: root
+    entrypoint: [ "check-config-server-started.sh" ]
+    depends_on:
+      - config-server
+      - kafka-to-elastic-service
+      - elastic-1
+      - elastic-2
+      - elastic-3
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006 -Xms128m -Xmx256m"
+      - "LOGGING_LEVEL_COM_MICROSERVICES_DEMO=info"
+      - "LOGGING_LEVEL_ROOT=info"
+      - "ELASTIC-CONFIG_INDEX-NAME=twitter-index"
+      - "ELASTIC-CONFIG_CONNECTION-URL=http://elastic-1:9200"
+      - "SERVER_PORT=8183"
+      - "SERVER_SERVLET_CONTEXT-PATH=/elastic-query-service"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
     networks:
       - ${GLOBAL_NETWORK:-services}
