@@ -28,6 +28,7 @@
         <module>kafka/kafka-producer</module>
         <module>kafka-to-elastic-service</module>
         <module>twitter-to-kafka-service</module>
+        <module>elastic-query-web-client</module>
     </modules>
 
 
