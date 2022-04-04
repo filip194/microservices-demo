@@ -27,9 +27,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RestController
 // @Controller + @ResponseBody; @ResponseBody not needed on methods if @RestController is defined on class level
+// RestController will add ResponseBody annotation which automatically converts response to json, which won't work
+// with thymeleaf, as it needs a string response
+@RestController
 @RequestMapping(value = "/documents", produces = "application/vnd.api.v1+json")
+
 public class ElasticDocumentController
 {
     private final ElasticQueryService elasticQueryService;
