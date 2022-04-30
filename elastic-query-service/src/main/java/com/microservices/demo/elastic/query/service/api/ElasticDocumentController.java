@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 
 public class ElasticDocumentController
 {
+    @Value("${server.port}")
+    private String port;
     private final ElasticQueryService elasticQueryService;
 
     public ElasticDocumentController(ElasticQueryService elasticQueryService)
@@ -120,7 +123,7 @@ public class ElasticDocumentController
     {
         final List<ElasticQueryServiceResponseModel> response = elasticQueryService.getDocumentByText(
                 elasticQueryServiceRequestModel.getText());
-        log.info("Elasticsearch returned {} of documents", response.size());
+        log.info("Elasticsearch returned {} of documents on port {}", response.size(), port);
         return ResponseEntity.ok(response);
     }
 

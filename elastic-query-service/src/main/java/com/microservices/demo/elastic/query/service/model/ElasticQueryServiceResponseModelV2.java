@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false) // explicitly states superclass equals nad hashcode won't be used, gets rid of the warning
 // RepresentationModel is used to add _links of HATEOAS API development principle
 public class ElasticQueryServiceResponseModelV2 extends RepresentationModel<ElasticQueryServiceResponseModel>
 {

@@ -18,3 +18,5 @@ done
 
 #./cnb/lifecycle/launcher # this launcher is deprecated as of new Spring Boot version > 2.5.x, use launcher below instead; process/web actually points to launcher
 ./cnb/process/web
+
+#./check-elastic-cluster-started.sh

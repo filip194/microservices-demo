@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .logout()
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");;
+                .deleteCookies("JSESSIONID");
     }
 
     @Override
@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         auth
                 .inMemoryAuthentication()
                 .withUser(userConfigData.getUsername())
-                .password(userConfigData.getPassword())
+                // .password(userConfigData.getPassword()) // using BCrypted and then encrypted password with JCE
+                .password(passwordEncoder().encode(userConfigData.getPassword())) // using encrypted password with JCE, preferred way as it is working in all cases, and the above on is not
                 .roles(userConfigData.getRoles());
     }
 
