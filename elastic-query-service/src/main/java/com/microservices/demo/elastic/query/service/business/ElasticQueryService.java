@@ -2,7 +2,7 @@ package com.microservices.demo.elastic.query.service.business;
 
 import java.util.List;
 
-import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceResponseModel;
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
 
 public interface ElasticQueryService
 {

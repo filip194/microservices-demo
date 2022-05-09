@@ -4,6 +4,8 @@ import java.time.ZonedDateTime;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.microservices.demo.elastic.query.service.model;
+package com.microservices.demo.elastic.query.web.client.common.model;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticQueryServiceRequestModel
+public class ElasticQueryWebClientRequestModel
 {
     private String id;
     @NotEmpty
