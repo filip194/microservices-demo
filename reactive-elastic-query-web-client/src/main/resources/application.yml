@@ -1,0 +1,16 @@
+# properties placed here will override properties from config-server-repository
+
+# once these were in bootstrap.yml properties
+spring:
+  application:
+    name: reactive-elastic-query-web-client
+  profiles:
+    active: reactive_elastic_query_web_client # from config-client-reactive_elastic_query_web_client
+  config:
+    import: 'configserver:' # since I do not set URI here, it will default to http://localhost:8888, so if it's not available application startup will fail
+  cloud:
+    config:
+      name: reactive-elastic-query-web-client,config-client # we use this prefix 'config-client' in config-server-repository
+      #uri: http://localhost:8888 # deprecated in favor of spring.config.import from Spring Boot 2.4.0
+      username: spring_cloud_user
+      password: '{cipher}d4403ce6ae8fc4002dcc4b21bc8051da2488ac0f8f9baceb1888d1676a1104e489abd0658f83ffc2bee354322a4e8aba'

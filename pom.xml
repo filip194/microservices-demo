@@ -32,6 +32,7 @@
         <module>kafka-to-elastic-service</module>
         <module>reactive-elastic-query-service</module>
         <module>twitter-to-kafka-service</module>
+        <module>reactive-elastic-query-web-client</module>
     </modules>
 
 
