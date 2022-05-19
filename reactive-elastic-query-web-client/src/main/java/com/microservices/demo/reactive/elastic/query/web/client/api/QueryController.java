@@ -52,8 +52,8 @@ public class QueryController
         Flux<ElasticQueryWebClientResponseModel> responseModel = elasticQueryWebClient.getDataByText(requestModel);
         responseModel = responseModel.log();
         // second parameter, 1, is to set the buffer size to 1, so we will see results one by one on the web browser
-        IReactiveDataDriverContextVariable reactiveData = new ReactiveDataDriverContextVariable(responseModel, 1);
-        model.addAttribute("elasticQueryClientResponseModels", responseModel);
+        final IReactiveDataDriverContextVariable reactiveData = new ReactiveDataDriverContextVariable(responseModel, 1);
+        model.addAttribute("elasticQueryClientResponseModels", reactiveData);
         model.addAttribute("searchText", requestModel.getText());
         model.addAttribute("elasticQueryClientRequestModel", ElasticQueryWebClientRequestModel.builder().build());
 
