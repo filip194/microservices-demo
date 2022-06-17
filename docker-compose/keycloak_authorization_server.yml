@@ -10,7 +10,7 @@ services:
     image: postgres:${POSTGRES_VERSION:-latest}
     volumes:
       - ./postgres_data:/var/lib/postgresql/data # all changes in database will be stored in this volume
-      - ./postgres_init/01-init.sh:/docker-entrypoint-initdb.d/init-db.sh # used only on first time container is being built to create database and users
+      - ./postgres_init/01-init.sh:/docker-entrypoint-initdb.d/init-db.sh # used only first time container is built to create database and users
     environment:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"

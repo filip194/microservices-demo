@@ -8,6 +8,7 @@ mvnw.cmd
 **/*.log
 !**/src/main/**/target/
 !**/src/test/**/target/
+**/docker-compose/postgres_data/
 
 ### STS ###
 .apt_generated
