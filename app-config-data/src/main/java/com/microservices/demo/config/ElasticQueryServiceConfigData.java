@@ -11,6 +11,7 @@ import lombok.Data;
 public class ElasticQueryServiceConfigData
 {
     private String version;
+    private String customAudience;
     private Long backPressureDelayMs;
 }
 

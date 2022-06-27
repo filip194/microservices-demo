@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+// isAuthenticated() is method from inside annotation, so it will only serve the authenticated user
+@PreAuthorize(value = "isAuthenticated()")
 // @Controller + @ResponseBody; @ResponseBody not needed on methods if @RestController is defined on class level
 // RestController will add ResponseBody annotation which automatically converts response to json, which won't work
 // with thymeleaf, as it needs a string response
@@ -106,6 +109,7 @@ public class ElasticDocumentController
         return ResponseEntity.ok(responseModelV2);
     }
 
+    @PreAuthorize("hasRole('APP_USER_ROLE') || hasAuthority('SCOPE_APP_USER_ROLE')")
     @Operation(summary = "Get elastic document by text")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
