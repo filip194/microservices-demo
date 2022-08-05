@@ -1,6 +1,7 @@
 package com.microservices.demo.elastic.query.service.security;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,8 @@ public class TwitterQueryUser implements UserDetails
     private String username;
 
     private Collection<? extends GrantedAuthority> authorities;
+
+    private Map<String, PermissionType> permissions;
 
     // setter to pass parsed authorities from JWt into the UserDetails object
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities)

@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TwitterElasticRepositoryQueryClient implements ElasticQueryClient<TwitterIndexModel>
 {
-    private TwitterElasticsearchQueryRepository twitterElasticsearchQueryRepository;
+    private final TwitterElasticsearchQueryRepository twitterElasticsearchQueryRepository;
 
     public TwitterElasticRepositoryQueryClient(TwitterElasticsearchQueryRepository twitterElasticsearchQueryRepository)
     {
@@ -31,7 +31,7 @@ public class TwitterElasticRepositoryQueryClient implements ElasticQueryClient<T
     {
         final Optional<TwitterIndexModel> searchResult = twitterElasticsearchQueryRepository.findById(id);
         log.info("Document with id {} retrieved successfully", searchResult.orElseThrow(
-                () -> new ElasticQueryClientException("No document found at aelasticsearch with id " + id)).getId());
+                () -> new ElasticQueryClientException("No document found at elasticsearch with id " + id)).getId());
         return searchResult.get();
     }
 

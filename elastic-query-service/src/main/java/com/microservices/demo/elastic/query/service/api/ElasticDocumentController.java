@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-// isAuthenticated() is method from inside annotation, so it will only serve the authenticated user
+// isAuthenticated() is method from inside @PreAuthorize annotation, so it will only serve the authenticated user
 @PreAuthorize(value = "isAuthenticated()")
 // @Controller + @ResponseBody; @ResponseBody not needed on methods if @RestController is defined on class level
 // RestController will add ResponseBody annotation which automatically converts response to json, which won't work
@@ -39,16 +40,17 @@ import lombok.extern.slf4j.Slf4j;
 
 public class ElasticDocumentController
 {
+    private final ElasticQueryService elasticQueryService;
+
     @Value("${server.port}")
     private String port;
-    private final ElasticQueryService elasticQueryService;
 
     public ElasticDocumentController(ElasticQueryService elasticQueryService)
     {
         this.elasticQueryService = elasticQueryService;
     }
 
-
+    @PostAuthorize("hasPermission(returnObject, 'READ')")
     @Operation(summary = "Get all elastic documents")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
@@ -68,6 +70,7 @@ public class ElasticDocumentController
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasPermission(#id, 'ElasticQueryServiceResponseModel', 'READ')")
     @Operation(summary = "Get elastic document by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
@@ -109,7 +112,8 @@ public class ElasticDocumentController
         return ResponseEntity.ok(responseModelV2);
     }
 
-    @PreAuthorize("hasRole('APP_USER_ROLE') || hasAuthority('SCOPE_APP_USER_ROLE')")
+    @PreAuthorize("hasRole('APP_USER_ROLE') || hasRole('APP_SUPER_USER_ROLE') || hasAuthority('SCOPE_APP_USER_ROLE')")
+    @PostAuthorize("hasPermission(returnObject, 'READ')")
     @Operation(summary = "Get elastic document by text")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
