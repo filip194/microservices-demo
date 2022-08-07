@@ -1,5 +1,22 @@
 # properties placed here will override properties from config-server-repository
 
+logging:
+  level:
+    root: debug
+
+# override services.yml setup for now
+elastic-query-web-client:
+  webclient:
+    instances:
+      -
+        id: elastic-query-service-1
+        host: localhost
+        port: 8183
+#      -
+#        id: elastic-query-service-2
+#        host: localhost
+#        port: 8185
+
 # once these were in bootstrap.yml properties
 spring:
   application:
