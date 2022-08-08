@@ -1,9 +1,4 @@
 version: '3.8'
-
-networks:
-  application:
-    driver: bridge
-
 services:
   postgres:
     container_name: keycloak_postgres
@@ -35,7 +30,7 @@ services:
           memory: 256M
 
   keycloak-authorization-server:
-    container_name: keycloak-server
+    hostname: keycloak-server
     image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
     entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
     ports:
