@@ -1,6 +1,9 @@
 #!/bin/bash
 # check-keycloak-server-started.sh
 
+apt-get update -y
+yes | apt-get install curl
+
 # execute curl
 curlResult=$(curl -s -o /dev/null -I -w "%{http_code}" http://keycloak-authorization-server:9091/realms/microservices-realm)
 
@@ -13,4 +16,4 @@ while [[ ! $curlResult == "200" ]]; do
 done
 
 #./cnb/lifecycle/launcher # this launcher is deprecated as of new Spring Boot version > 2.5.x, use launcher below instead; process/web actually points to launcher
-./cnb/process/web  # always required
+/cnb/process/web

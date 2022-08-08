@@ -1,4 +1,5 @@
 #!/bin/bash
+# check-elastic-cluster-started.sh
 
 apt-get update -y
 
@@ -14,4 +15,4 @@ while [[ ! $curlResult == "200" ]]; do
   curlResult=$(curl -s -o /dev/null -I -w "%{http_code}" http://elastic-1:9200)
 done
 
-./cnb/process/web # always required
+/cnb/process/web

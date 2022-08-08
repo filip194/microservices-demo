@@ -2,7 +2,6 @@
 # check-kafka-topics-created.sh
 
 apt-get update -y
-
 yes | apt-get install kafkacat
 
 kafkacatResult=$(kafkacat -L -b kafka-broker-1:9092)
@@ -15,4 +14,4 @@ while [[ ! $kafkacatResult == *"twitter-topic"* ]]; do
   kafkacatResult=$(kafkacat -L -b kafka-broker-1:9092)
 done
 
-./cnb/process/web  # always required
+/cnb/process/web

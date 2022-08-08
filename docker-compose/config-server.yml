@@ -2,6 +2,8 @@ version: '3.8'
 services:
   config-server:
     image: ${GROUP_ID}/config.server:${SERVICE_VERSION:-latest}
+    container_name: config-server
+    hostname: config-server
     ports:
       - "5007:5007"
       - "8888:8888"

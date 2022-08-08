@@ -1,4 +1,4 @@
-# Setup
+# Project Setup
 
 ---
 
@@ -12,6 +12,7 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 ```
 # Event-Driven Microservices Course
 
+127.0.0.1       postgres
 127.0.0.1       keycloak-authorization-server
 127.0.0.1       elastic-query-service-1
 127.0.0.1       elastic-query-service-2
@@ -19,13 +20,13 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 127.0.0.1       elastic-query-web-client-2
 ```
 
-- /etc/hosts file will be overridden at each WSL startup beacuse it is generated from %WINDIR%\System32\drivers\etc\hosts, here is the solution: https://superuser.com/questions/1150597/linux-overrides-etc-hosts-on-windows-linux-subsystem
+- /etc/hosts file will be overridden at each WSL startup because it is generated from %WINDIR%\System32\drivers\etc\hosts, here is the solution: https://superuser.com/questions/1150597/linux-overrides-etc-hosts-on-windows-linux-subsystem
 
 - in /etc/wsl.conf add next lines:
 
 ```
 [network]
-generateHosts = False
+generateHosts = false
 ```
 
 ## Memory

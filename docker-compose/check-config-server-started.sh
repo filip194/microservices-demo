@@ -1,7 +1,6 @@
 #!/bin/bash
 # check-config-server-started.sh
 
-# install curl command line utility
 apt-get update -y
 yes | apt-get install curl
 
@@ -16,9 +15,9 @@ while [[ ! $curlResult == "200" ]]; do
   curlResult=$(curl -s -o /dev/null -I -w "%{http_code}" http://config-server:8888/actuator/health)
 done
 
+check-elastic-cluster-started.sh
+
+check-keycloak-server-started.sh
+
 #./cnb/lifecycle/launcher # this launcher is deprecated as of new Spring Boot version > 2.5.x, use launcher below instead; process/web actually points to launcher
-./cnb/process/web # always required
-
-#./check-elastic-cluster-started.sh
-
-./check-keycloak-server-started.sh
+#./cnb/process/web # always required

@@ -2,6 +2,7 @@ version: '3.8'
 services: # we have 3 elastic nodes as we have 3 in kafka cluster
   elastic-1:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest} # using official elasticsearch docker image
+    container_name: elastic-1
     hostname: elastic-1
     environment:
       - node.name=elastic-1
@@ -22,6 +23,8 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
       - ${GLOBAL_NETWORK:-elastic}
   elastic-2:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    container_name: elastic-2
+    hostname: elastic-2
     environment:
       - node.name=elastic-2
       - cluster.name=es-twitter-cluster
@@ -39,6 +42,8 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
       - ${GLOBAL_NETWORK:-elastic}
   elastic-3:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    container_name: elastic-3
+    hostname: elastic-3
     environment:
       - node.name=elastic-3
       - cluster.name=es-twitter-cluster
