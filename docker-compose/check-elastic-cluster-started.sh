@@ -14,4 +14,4 @@ while [[ ! $curlResult == "200" ]]; do
   curlResult=$(curl -s -o /dev/null -I -w "%{http_code}" http://elastic-1:9200)
 done
 
-./cnb/process/web
+./cnb/process/web # always required

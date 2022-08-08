@@ -36,6 +36,16 @@ Enable max virtualized memory (for dockerized services in WSL):
 
 > sudo sysctl -w vm.max_map_count=262144
 
+## Executing .sh files
+
+For Docker to be able to use .sh files they have to be in root group, so if needed use:
+
+> sudo chown userName:root fileName
+
+... and they have to have executable permissions:
+
+> sudo chmod 755 fileName
+
 ## Kafkacat
 
 ---
