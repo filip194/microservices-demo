@@ -2,7 +2,6 @@
 # check-elastic-cluster-started.sh
 
 apt-get update -y
-
 yes | apt-get install curl
 
 curlResult=$(curl -s -o /dev/null -I -w "%{http_code}" http://elastic-1:9200)
