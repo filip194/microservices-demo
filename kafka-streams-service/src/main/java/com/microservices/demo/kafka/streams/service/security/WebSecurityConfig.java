@@ -1,4 +1,4 @@
-package com.microservices.demo.elastic.query.service.security;
+package com.microservices.demo.kafka.streams.service.security;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,20 +20,23 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
+/**
+ * The same as WebSecurityConfig from elastic-query-service
+ */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
-    private final TwitterQueryUserDetailsService twitterQueryUserDetailsService;
+    private final KafkaStreamsUserDetailsService kafkaStreamsUserDetailsService;
     private final OAuth2ResourceServerProperties oAuth2ResourceServerProperties;
 
     @Value("${security.paths-to-ignore}")
     private String[] pathsToIgnore;
 
-    public WebSecurityConfig(TwitterQueryUserDetailsService twitterQueryUserDetailsService,
+    public WebSecurityConfig(KafkaStreamsUserDetailsService kafkaStreamsUserDetailsService,
             OAuth2ResourceServerProperties oAuth2ResourceServerProperties)
     {
-        this.twitterQueryUserDetailsService = twitterQueryUserDetailsService;
+        this.kafkaStreamsUserDetailsService = kafkaStreamsUserDetailsService;
         this.oAuth2ResourceServerProperties = oAuth2ResourceServerProperties;
     }
 
@@ -58,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     // using qualifier here to inject our audience validator
     @Bean
     JwtDecoder JwtDecoder(
-            @Qualifier("elastic-query-service-audience-validator") OAuth2TokenValidator<Jwt> audienceValidator)
+            @Qualifier("kafka-streams-service-audience-validator") OAuth2TokenValidator<Jwt> audienceValidator)
     {
         // Nimbus is underlying library that Spring uses for JWT operations
         final NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(
@@ -77,15 +80,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     @Bean
     Converter<Jwt, ? extends AbstractAuthenticationToken> twitterQueryUserJwtConverter()
     {
-        return new TwitterQueryUserJwtConverter(twitterQueryUserDetailsService);
+        return new KafkaStreamsUserJwtConverter(kafkaStreamsUserDetailsService);
     }
 
     @Override
     public void configure(WebSecurity webSecurity)
     {
-       webSecurity
-               .ignoring()
-               .antMatchers(pathsToIgnore);
+        webSecurity
+                .ignoring()
+                .antMatchers(pathsToIgnore);
     }
 
 }
