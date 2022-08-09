@@ -1,4 +1,7 @@
 version: '3.8'
+networks:
+  application:
+    driver: bridge
 services:
   postgres:
     image: postgres:${POSTGRES_VERSION:-latest}
@@ -34,9 +37,9 @@ services:
     image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
     container_name: keycloak-authorization-server
     hostname: keycloak-authorization-server
-    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--http-port", "9091"]
     ports:
-      - "9091:8080"
+      - "9091:9091"
     environment:
       - "KEYCLOAK_ADMIN=admin"
       - "KEYCLOAK_ADMIN_PASSWORD=admin"
