@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.microservices.demo.kafka.streams.service.init.StreamsInitializer;
 import com.microservices.demo.kafka.streams.service.runner.StreamsRunner;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +31,11 @@ public class KafkaStreamsServiceApplication implements CommandLineRunner
     }
 
     @Override
-    public void run(String... args) throws Exception
+    public void run(String... args)
     {
-
+        log.info("App starts...");
+        streamsInitializer.init();
+        streamsRunner.start();
     }
 }
 

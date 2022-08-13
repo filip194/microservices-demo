@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
-                .jwtAuthenticationConverter(twitterQueryUserJwtConverter());
+                .jwtAuthenticationConverter(kafkaStreamsUserJwtAuthConverter());
     }
 
     // using qualifier here to inject our audience validator
@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Bean
-    Converter<Jwt, ? extends AbstractAuthenticationToken> twitterQueryUserJwtConverter()
+    Converter<Jwt, ? extends AbstractAuthenticationToken> kafkaStreamsUserJwtAuthConverter()
     {
         return new KafkaStreamsUserJwtConverter(kafkaStreamsUserDetailsService);
     }
