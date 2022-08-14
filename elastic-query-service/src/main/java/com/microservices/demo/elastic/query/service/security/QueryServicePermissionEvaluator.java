@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceRequestModel;
 import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
+import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceAnalyticsResponseModel;
 
 // Implementing custom permission strategy
 @Component
@@ -53,10 +54,10 @@ public class QueryServicePermissionEvaluator implements PermissionEvaluator
             {
                 return true;
             }
-            final List<ElasticQueryServiceResponseModel> responseBody =
-                    ((ResponseEntity<List<ElasticQueryServiceResponseModel>>) targetDomainObject).getBody();
+            final ElasticQueryServiceAnalyticsResponseModel responseBody =
+                    ((ResponseEntity<ElasticQueryServiceAnalyticsResponseModel>) targetDomainObject).getBody();
             Objects.requireNonNull(responseBody);
-            return postAuthorize(authentication, permission, responseBody);
+            return postAuthorize(authentication, permission, responseBody.getElasticQueryServiceResponseModels());
         }
 
         return false;
