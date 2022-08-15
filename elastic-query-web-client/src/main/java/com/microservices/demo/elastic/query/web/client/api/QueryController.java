@@ -66,6 +66,6 @@ public class QueryController
         model.addAttribute("elasticQueryWebClientRequestModel", ElasticQueryWebClientRequestModel.builder().build());
 
         return "home";
-
     }
+
 }

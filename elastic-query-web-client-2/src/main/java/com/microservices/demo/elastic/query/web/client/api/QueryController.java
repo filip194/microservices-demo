@@ -1,7 +1,5 @@
 package com.microservices.demo.elastic.query.web.client.api;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -9,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientAnalyticsResponseModel;
 import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientRequestModel;
-import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientResponseModel;
 import com.microservices.demo.elastic.query.web.client.service.ElasticQueryWebClient;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,9 +58,10 @@ public class QueryController
     {
         log.info("Querying by text: {}", requestModel.getText());
 
-        final List<ElasticQueryWebClientResponseModel> responseModels = elasticQueryWebClient.getDataByText(
+        final ElasticQueryWebClientAnalyticsResponseModel responseModel = elasticQueryWebClient.getDataByText(
                 requestModel);
-        model.addAttribute("elasticQueryWebClientResponseModels", responseModels);
+        model.addAttribute("elasticQueryWebClientResponseModels", responseModel.getQueryResponseModels());
+        model.addAttribute("wordCount", responseModel.getWordCount());
         model.addAttribute("searchText", requestModel.getText());
         model.addAttribute("elasticQueryWebClientRequestModel", ElasticQueryWebClientRequestModel.builder().build());
 

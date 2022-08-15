@@ -306,7 +306,7 @@ services:
       - "LOGGING_LEVEL_ROOT=debug"
       - "SERVER_PORT=8187"
       - "SERVER_SERVLET_CONTEXT-PATH=/kafka-streams-service"
-      - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888,http://config-server-ha:8889"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888"
       - "SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI=http://keycloak-authorization-server:9091/realms/microservices-realm"
       - "SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI=http://keycloak-authorization-server:9091/realms/microservices-realm/protocol/openid-connect/certs"
       - "KAFKA-CONFIG_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"

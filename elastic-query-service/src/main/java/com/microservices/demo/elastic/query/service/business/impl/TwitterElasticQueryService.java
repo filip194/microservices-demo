@@ -37,7 +37,7 @@ public class TwitterElasticQueryService implements ElasticQueryService
             ElasticQueryServiceResponseModelAssembler elasticQueryServiceResponseModelAssembler,
             ElasticQueryClient<TwitterIndexModel> elasticQueryClient,
             ElasticQueryServiceConfigData elasticQueryServiceConfigData,
-            @Qualifier("webClientBuilder") WebClient.Builder clientBuilder)
+            @Qualifier("webClientBuilder_elasticQueryService") WebClient.Builder clientBuilder)
     {
         this.elasticQueryServiceResponseModelAssembler = elasticQueryServiceResponseModelAssembler;
         this.elasticQueryClient = elasticQueryClient;
@@ -62,7 +62,8 @@ public class TwitterElasticQueryService implements ElasticQueryService
 
         return ElasticQueryServiceAnalyticsResponseModel.builder()
                 .elasticQueryServiceResponseModels(elasticQueryServiceResponseModels)
-                .wordCount(getWordCount(text, accessToken)).build();
+                .wordCount(getWordCount(text, accessToken))
+                .build();
     }
 
     @Override
@@ -100,7 +101,7 @@ public class TwitterElasticQueryService implements ElasticQueryService
                 .retrieve()
                 .onStatus(
                         s -> s.equals(HttpStatus.UNAUTHORIZED),
-                        clientResponse -> Mono.just(new BadCredentialsException("Not authenticated")))
+                        clientResponse -> Mono.just(new BadCredentialsException("Not authenticated!")))
                 .onStatus(
                         HttpStatus::is4xxClientError,
                         clientResponse -> Mono.just(

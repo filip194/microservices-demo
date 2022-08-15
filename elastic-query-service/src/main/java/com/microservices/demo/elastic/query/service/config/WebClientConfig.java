@@ -31,7 +31,7 @@ public class WebClientConfig
     }
 
     @LoadBalanced
-    @Bean
+    @Bean("webClientBuilder_elasticQueryService")
     public WebClient.Builder webClientBuilder()
     {
         return WebClient.builder()

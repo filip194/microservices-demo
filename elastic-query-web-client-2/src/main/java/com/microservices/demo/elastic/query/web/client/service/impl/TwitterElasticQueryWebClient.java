@@ -1,7 +1,5 @@
 package com.microservices.demo.elastic.query.web.client.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,8 +12,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.microservices.demo.config.ElasticQueryWebClientConfigData;
 import com.microservices.demo.elastic.query.web.client.common.exception.ElasticQueryWebClientException;
+import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientAnalyticsResponseModel;
 import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientRequestModel;
-import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientResponseModel;
 import com.microservices.demo.elastic.query.web.client.service.ElasticQueryWebClient;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +34,11 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
     }
 
     @Override
-    public List<ElasticQueryWebClientResponseModel> getDataByText(ElasticQueryWebClientRequestModel requestModel)
+    public ElasticQueryWebClientAnalyticsResponseModel getDataByText(ElasticQueryWebClientRequestModel requestModel)
     {
         log.info("Querying by text {}", requestModel.getText());
         return getWebClient(requestModel)
-                .bodyToFlux(ElasticQueryWebClientResponseModel.class)
-                .collectList()
+                .bodyToMono(ElasticQueryWebClientAnalyticsResponseModel.class)
                 .block();
     }
 

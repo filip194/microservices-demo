@@ -57,7 +57,7 @@ public class QueryServicePermissionEvaluator implements PermissionEvaluator
             final ElasticQueryServiceAnalyticsResponseModel responseBody =
                     ((ResponseEntity<ElasticQueryServiceAnalyticsResponseModel>) targetDomainObject).getBody();
             Objects.requireNonNull(responseBody);
-            return postAuthorize(authentication, permission, responseBody.getElasticQueryServiceResponseModels());
+            return postAuthorize(authentication, responseBody.getElasticQueryServiceResponseModels(), permission);
         }
 
         return false;
@@ -85,8 +85,8 @@ public class QueryServicePermissionEvaluator implements PermissionEvaluator
         return hasPermission((String) permission, userPermission);
     }
 
-    private boolean postAuthorize(Authentication authentication, Object permission,
-            List<ElasticQueryServiceResponseModel> responseBody)
+    private boolean postAuthorize(Authentication authentication, List<ElasticQueryServiceResponseModel> responseBody,
+            Object permission)
     {
         final TwitterQueryUser twitterQueryUser = (TwitterQueryUser) authentication.getPrincipal();
 
