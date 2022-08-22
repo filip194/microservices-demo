@@ -60,7 +60,7 @@ public class QueryController
 
         final ElasticQueryWebClientAnalyticsResponseModel responseModel = elasticQueryWebClient.getDataByText(
                 requestModel);
-        model.addAttribute("elasticQueryWebClientResponseModels", responseModel.getQueryResponseModels());
+        model.addAttribute("elasticQueryWebClientResponseModels", responseModel.getElasticQueryServiceResponseModels());
         model.addAttribute("wordCount", responseModel.getWordCount());
         model.addAttribute("searchText", requestModel.getText());
         model.addAttribute("elasticQueryWebClientRequestModel", ElasticQueryWebClientRequestModel.builder().build());
