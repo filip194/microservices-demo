@@ -10,6 +10,7 @@
     </parent>
 
     <modules>
+        <module>analytics-service</module>
         <module>app-config-data</module>
         <module>common-config</module>
         <module>config-server</module>

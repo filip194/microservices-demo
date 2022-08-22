@@ -19,9 +19,11 @@ services:
     image: postgres:${POSTGRES_VERSION:-latest}
     container_name: postgres
     hostname: postgres
+    command: [ "postgres", "-c", "log_statement=all" ]
     volumes:
       - ./postgres_data:/var/lib/postgresql/data # all changes in database will be stored in this volume
       - ./postgres_init/01-init.sh:/docker-entrypoint-initdb.d/init-db.sh # used only first time container is built to create database and users
+    #      - ./postgres_init/postgresql.conf:/var/lib/postgresql/data/postgresql.conf # replaced with command
     environment:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
@@ -89,8 +91,8 @@ services:
       - "LOGGING_LEVEL_COM_MICROSERVICES_DEMO=info"
       - "LOGGING_LEVEL_ROOT=info"
       - "KAFKA-CONFIG_TOPIC-NAME=twitter-topic"
-      - "KAFKA-CONFIG_TOPIC-NAMES-TO-CREATE_0=twitter_topic"
-      - "KAFKA-CONFIG_TOPIC-NAMES-TO-CREATE_1=twitter_analytics_topic"
+      - "KAFKA-CONFIG_TOPIC-NAMES-TO-CREATE_0=twitter-topic"
+      - "KAFKA-CONFIG_TOPIC-NAMES-TO-CREATE_1=twitter-analytics-topic"
       - "KAFKA-CONFIG_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "KAFKA-CONFIG_SCHEMA-REGISTRY-URL=http://schema-registry:8081"
       # -> overwrite enable mock tweets variable in services.yml file to run application using mock tweets ->
@@ -169,6 +171,7 @@ services:
       - "SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN-URI=http://keycloak-authorization-server:9091/realms/microservices-realm/protocol/openid-connect/token"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true"
       - "ELASTIC-QUERY-SERVICE_QUERY-FROM-KAFKA-STATE-STORE_URI=http://kafka-streams-service:8187/kafka-streams-service/get-word-count-by-word/{word}"
+      - "ELASTIC-QUERY-SERVICE_QUERY-FROM-ANALYTICS-DATABASE_URI=http://analytics-service:8188/analytics-service/get-word-count-by-word/{word}"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
       - "SPRING_DATA_ELASTICSEARCH_CLIENT_REACTIVE_ENDPOINTS=elastic-1:9200"
     networks:
@@ -208,6 +211,7 @@ services:
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true"
       - "SPRING_DATASOURCE_INITIALIZATION-MODE=never" # schema is already created and data is already inserted so we might get initialization errors
       - "ELASTIC-QUERY-SERVICE_QUERY-FROM-KAFKA-STATE-STORE_URI=http://kafka-streams-service:8187/kafka-streams-service/get-word-count-by-word/{word}"
+      - "ELASTIC-QUERY-SERVICE_QUERY-FROM-ANALYTICS-DATABASE_URI=http://analytics-service:8188/analytics-service/get-word-count-by-word/{word}"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
       - "SPRING_DATA_ELASTICSEARCH_CLIENT_REACTIVE_ENDPOINTS=elastic-1:9200"
     networks:
@@ -309,6 +313,38 @@ services:
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888"
       - "SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI=http://keycloak-authorization-server:9091/realms/microservices-realm"
       - "SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI=http://keycloak-authorization-server:9091/realms/microservices-realm/protocol/openid-connect/certs"
+      - "KAFKA-CONFIG_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
+      - "KAFKA-CONFIG_SCHEMA-REGISTRY-URL=http://schema-registry:8081"
+      - "ENCRYPT_KEY=${ENCRYPT_KEY}"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+
+  analytics-service:
+    image: ${GROUP_ID}/analytics.service:${SERVICE_VERSION:-latest}
+    container_name: analytics-service
+    hostname: analytics-service
+    ports:
+      - "5013:5013"
+      - "8188:8188"
+    volumes:
+      - "./docker-logs:/workspace/analytics-service/logs"
+      - "./check-config-server-started.sh:/usr/local/bin/check-config-server-started.sh"
+      - "./check-keycloak-server-started.sh:/usr/local/bin/check-keycloak-server-started.sh"
+    user: root
+    entrypoint: [ "check-config-server-started.sh" ]
+    depends_on:
+      - config-server
+      - postgres
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5013 -Xms128m -Xmx256m"
+      - "LOGGING_LEVEL_COM_MICROSERVICES_DEMO=info"
+      - "LOGGING_LEVEL_ROOT=info"
+      - "SERVER_PORT=8188"
+      - "SERVER_SERVLET_CONTEXT-PATH=/analytics-service"
+      - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888"
+      - "SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI=http://keycloak-authorization-server:9091/realms/microservices-realm"
+      - "SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI=http://keycloak-authorization-server:9091/realms/microservices-realm/protocol/openid-connect/certs"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=analytics&binaryTransfer=true&reWriteBatchedInserts=true"
       - "KAFKA-CONFIG_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "KAFKA-CONFIG_SCHEMA-REGISTRY-URL=http://schema-registry:8081"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"

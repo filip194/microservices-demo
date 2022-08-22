@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 
     // using qualifier here to inject our audience validator
     @Bean
-    JwtDecoder JwtDecoder(
+    public JwtDecoder JwtDecoder(
             @Qualifier("kafka-streams-service-audience-validator") OAuth2TokenValidator<Jwt> audienceValidator)
     {
         // Nimbus is underlying library that Spring uses for JWT operations
@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Bean
-    Converter<Jwt, ? extends AbstractAuthenticationToken> kafkaStreamsUserJwtAuthConverter()
+    public Converter<Jwt, ? extends AbstractAuthenticationToken> kafkaStreamsUserJwtAuthConverter()
     {
         return new KafkaStreamsUserJwtConverter(kafkaStreamsUserDetailsService);
     }
