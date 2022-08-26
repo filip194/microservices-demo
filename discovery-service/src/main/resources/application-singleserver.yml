@@ -1,0 +1,20 @@
+server:
+  port: 8761
+
+# Multiple eureka instances can register one with another, here we disabled it
+eureka:
+  client:
+    register-with-eureka: false # Tells this Eureka client not to register with other Eureka servers
+    fetch-registry: false # Tells this Eureka client not to fetch registries from other Eureka instances
+  instance:
+    appname: service-registry-cluster
+
+# Without logging options below, when Eureka registry starts, it will complain that there are no replica nodes
+# to which Eureka can connect. In production env there should be more than one Eureka node running
+
+# So, even though we specified we don't want to register this Eureka client instance with other Eureka servers,
+# exceptions will be thrown so we need to set logging properties:
+logging:
+  level:
+    com.netflix.eureka: OFF
+    com.netflix.discovery: OFF

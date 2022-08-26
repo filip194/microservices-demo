@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +22,8 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.TcpClient;
 
 @Configuration
-@LoadBalancerClient(name = "elastic-query-service", configuration = ElasticQueryServiceInstanceListSupplierConfig.class)
+// Not needed as we use client side load balancing with eureka
+// @LoadBalancerClient(name = "elastic-query-service", configuration = ElasticQueryServiceInstanceListSupplierConfig.class)
 public class WebClientConfig
 {
     private final ElasticQueryWebClientConfigData.WebClient elasticQueryWebClientConfigData;
@@ -40,6 +40,7 @@ public class WebClientConfig
      * @LoadBalanced -> to use this annotation we must create a bean in configuration, and we must use Builder of
      * org.springframework.web.reactive.function.client.WebClient for it have any effect
      */
+    // still needed
     @LoadBalanced
     @Bean("webClientBuilder")
     public WebClient.Builder webClientBuilder(

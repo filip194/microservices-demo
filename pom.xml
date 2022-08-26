@@ -15,6 +15,7 @@
         <module>common-config</module>
         <module>config-server</module>
         <module>common-util</module>
+        <module>discovery-service</module>
         <module>elastic</module>
         <module>elastic-query-service</module>
         <module>elastic-query-service-common</module>
@@ -56,7 +57,7 @@
         <spring-boot.version>2.6.3</spring-boot.version>
         <spring-kafka.version>2.8.2</spring-kafka.version>
         <spring-retry.version>1.3.1</spring-retry.version>
-        <spring-cloud-config-server.version>3.1.2</spring-cloud-config-server.version>
+        <spring-cloud.version>3.1.2</spring-cloud.version>
         <spring-cloud-dependencies.version>2021.0.0</spring-cloud-dependencies.version>
         <spring-cloud-starter-circuitbreaker-reactor-resilience4j.version>2.1.0
         </spring-cloud-starter-circuitbreaker-reactor-resilience4j.version>
@@ -111,20 +112,32 @@
                 <version>${spring-boot.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-config</artifactId>
-                <version>${spring-cloud-config-server.version}</version>
+                <version>${spring-cloud.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-config-server</artifactId>
-                <version>${spring-cloud-config-server.version}</version>
+                <version>${spring-cloud.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-loadbalancer</artifactId>
-                <version>${spring-cloud-config-server.version}</version>
+                <version>${spring-cloud.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>

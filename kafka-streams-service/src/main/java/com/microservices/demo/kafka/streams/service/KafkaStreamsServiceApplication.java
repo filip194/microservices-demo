@@ -3,6 +3,7 @@ package com.microservices.demo.kafka.streams.service;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.microservices.demo.kafka.streams.service.init.StreamsInitializer;
@@ -10,6 +11,7 @@ import com.microservices.demo.kafka.streams.service.runner.StreamsRunner;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableDiscoveryClient
 @Slf4j
 @SpringBootApplication
 @ComponentScan(basePackages = "com.microservices.demo")
