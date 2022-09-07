@@ -32,7 +32,7 @@ eureka:
     metadata-map:
       instanceId: ${spring.application.name}:${spring.application.instance_id:{random.value}}
   client:
-    service-url:
+    serviceUrl:
       defaultZone: http://discovery-service-1:8761/eureka/,http://discovery-service-2:8762/eureka/
 
 ---
@@ -46,5 +46,5 @@ eureka:
     metadata-map:
       instanceId: ${spring.application.name}:${spring.application.instance_id:{random.value}}
   client:
-    service-url:
+    serviceUrl:
       defaultZone: http://discovery-service-2:8762/eureka/,http://discovery-service-1:8761/eureka/
