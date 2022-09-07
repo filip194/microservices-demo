@@ -34,5 +34,8 @@ spring:
 
 eureka:
   client:
-    service-url:
+    serviceUrl:
       defaultZone: http://discovery-service-1:8761/eureka/,http://discovery-service-2:8762/eureka/
+  instance: # this service is defined as instance/client
+    lease-expiration-duration-in-seconds: 5 # each 5 seconds client will ask for a new lease from Eureka server
+    lease-renewal-interval-in-seconds: 2 # interval to send heartbeat from client to Eureka server

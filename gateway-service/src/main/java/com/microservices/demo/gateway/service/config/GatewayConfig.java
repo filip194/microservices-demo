@@ -64,9 +64,7 @@ public class GatewayConfig
                                 .minimumNumberOfCalls(gatewayServiceConfigData.getMinNumberOfCalls())
                                 .waitDurationInOpenState(
                                         Duration.ofMillis(gatewayServiceConfigData.getWaitDurationInOpenState()))
-                                .build()).build()
-
-        );
+                                .build()).build());
     }
 }
 

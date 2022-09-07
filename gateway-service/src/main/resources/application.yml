@@ -1,6 +1,11 @@
+logging:
+  level:
+    root: DEBUG
+
 # properties placed here will override properties from config-server-repository
 
 # once these were in bootstrap.yml properties
+
 spring:
   application:
     name: gateway-service
@@ -15,6 +20,10 @@ spring:
       username: spring_cloud_user
       password: '{cipher}d4403ce6ae8fc4002dcc4b21bc8051da2488ac0f8f9baceb1888d1676a1104e489abd0658f83ffc2bee354322a4e8aba'
 
-logging:
-  level:
-    root: DEBUG
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service-1:8761/eureka/,http://discovery-service-2:8762/eureka/
+  instance: # this service is defined as instance/client
+    lease-expiration-duration-in-seconds: 5 # each 5 seconds client will ask for a new lease from Eureka server
+    lease-renewal-interval-in-seconds: 2 # interval to send heartbeat from client to Eureka server

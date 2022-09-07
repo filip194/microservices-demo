@@ -13,7 +13,7 @@ public class WebSecurityConfig
     // that's a design decision
 
     // also we could have applied security here adn remove it from services or do it on both sides
-    // but it is safer to use security on service itself because service can be called from somewhere else instead of gateway
+    // but, it is safer to use security on service itself because service can be called from somewhere else instead of gateway
 
     @Bean
     public SecurityWebFilterChain webFluxSecurityConfig(ServerHttpSecurity httpSecurity)

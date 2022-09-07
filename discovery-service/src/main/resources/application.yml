@@ -5,6 +5,10 @@ eureka:
     fetch-registry: true # Tells this Eureka client to fetch registries from other Eureka instances
   instance:
     appname: service-registry-cluster
+  server: # this service is defined as server
+    enable-self-preservation: false # this tells eureka to NOT try to recover if it doesn't get heartbeat from a client, But, by default, Eureka is configured to wait for a configured time before evicting the client for higher resiliency, as temporary network outage can always happen. So with value set to false, we forced Eureka not to try to recover, but to evict the instances/clients that are unreachable.
+    expected-client-renewal-interval-seconds: 3 # 30 by default for production;
+    eviction-interval-timer-in-ms: 2000 # interval that eviction tasks scan for instances with expired leases; this way, discovery service will check the service's reachability for every 2 seconds, and if it's not reachable, evict it immediately.
 
 spring:
   cloud:
