@@ -20,6 +20,7 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 127.0.0.1       elastic-query-web-client-2
 127.0.0.1       discovery-service-1
 127.0.0.1       discovery-service-2
+127.0.0.1       gateway-service
 ```
 
 - /etc/hosts file will be overridden at each WSL startup because it is generated from %WINDIR%\System32\drivers\etc\hosts, here is the solution: https://superuser.com/questions/1150597/linux-overrides-etc-hosts-on-windows-linux-subsystem
