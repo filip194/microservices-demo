@@ -1,7 +1,4 @@
 version: '3.8'
-networks:
-  application:
-    driver: bridge
 services:
   postgres:
     image: postgres:${POSTGRES_VERSION:-latest}
