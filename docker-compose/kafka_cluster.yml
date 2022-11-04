@@ -6,6 +6,7 @@ services:
     hostname: zookeeper
     ports:
       - "2181:2181"
+    user: root
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -26,6 +27,7 @@ services:
       - kafka-broker-3
     ports:
       - "8081:8081"
+    user: root
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
@@ -40,6 +42,7 @@ services:
     hostname: kafka-broker-1
     ports:
       - "19092:19092"
+    user: root
     depends_on:
       - zookeeper
     environment:
@@ -57,6 +60,7 @@ services:
     hostname: kafka-broker-2
     ports:
       - "29092:29092"
+    user: root
     depends_on:
       - zookeeper
     environment:
@@ -74,6 +78,7 @@ services:
     hostname: kafka-broker-3
     ports:
       - "39092:39092"
+    user: root
     depends_on:
       - zookeeper
     environment:

@@ -4,6 +4,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-latest} # using official elasticsearch docker image
     container_name: elastic-1
     hostname: elastic-1
+    user: root
     environment:
       - node.name=elastic-1
       - cluster.name=es-twitter-cluster # each node must have the same cluster name to belong to that cluster
@@ -25,6 +26,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     container_name: elastic-2
     hostname: elastic-2
+    user: root
     environment:
       - node.name=elastic-2
       - cluster.name=es-twitter-cluster
@@ -44,6 +46,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     container_name: elastic-3
     hostname: elastic-3
+    user: root
     environment:
       - node.name=elastic-3
       - cluster.name=es-twitter-cluster
@@ -63,6 +66,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
     container_name: kibana
     hostname: kibana
+    user: root
     ports:
       - 5601:5601
     depends_on:
@@ -77,6 +81,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
     container_name: logstash
     hostname: logstash
+    user: root
     command: logstash -f /etc/logstash/conf.d/logback.conf
     ports:
       - "9600:9600"
