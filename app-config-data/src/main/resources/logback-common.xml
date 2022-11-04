@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
-<!--    these properties are not common and will change for each service with different value-->
-<!--    <property name="DEV_HOME" value="./twitter-to-kafka-service/logs"/>-->
-<!--    <property name="APP_NAME" value="twitter-to-kafka-service"/>-->
+    <!--    these properties are not common and will change for each service with different value-->
+    <!--    <property name="DEV_HOME" value="./twitter-to-kafka-service/logs"/>-->
+    <!--    <property name="APP_NAME" value="twitter-to-kafka-service"/>-->
 
     <!--    appender that writes to console-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %X{correlationID} %logger{36} - %msg%n
             </Pattern>
         </layout>
     </appender>
@@ -19,7 +19,7 @@
         <file>${DEV_HOME}/${APP_NAME}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %X{correlationID} %logger{36} - %msg%n
             </Pattern>
         </encoder>
         <!--        rolling policy to create new file when 10MB is reached, and to compress and keep old file-->
@@ -34,18 +34,34 @@
         </rollingPolicy>
     </appender>
 
-    <!--    log levels: trace > debug > info > warn > error -->
+    <appender name="STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/logstash/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily-->
+            <fileNamePattern>${DEV_HOME}/logstash/archived/${APP_NAME}-log.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
 
     <!--    attaching appenders to desired package with logging level-->
     <logger name="com.microservices.demo" level="info" additivity="false">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </logger>
 
     <!--    root logger will set log level as a root which can be overwritten using a specific logger-->
     <root level="info">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </root>
 
 </included>
+
+        <!--    log levels: trace > debug > info > warn > error -->
+        <!--    correlationID is used to follow a request across all services-->

@@ -2,6 +2,7 @@ package com.microservices.demo.elastic.query.service.business.impl;
 
 import java.util.List;
 
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import com.microservices.demo.elastic.query.service.common.model.ElasticQuerySer
 import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceAnalyticsResponseModel;
 import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceWordCountResponseModel;
 import com.microservices.demo.elastic.query.service.model.assembler.ElasticQueryServiceResponseModelAssembler;
+import com.microservices.demo.mdc.Constants;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -109,7 +111,10 @@ public class TwitterElasticQueryService implements ElasticQueryService
                 .build()
                 .method(HttpMethod.valueOf(queryFromKafkaStateStore.getMethod()))
                 .uri(queryFromKafkaStateStore.getUri(), uriBuilder -> uriBuilder.build(text))
-                .headers(h -> h.setBearerAuth(accessToken))
+                .headers(h -> {
+                    h.setBearerAuth(accessToken);
+                    h.set(Constants.CORRELATION_ID_HEADER, MDC.get(Constants.CORRELATION_ID_KEY));
+                })
                 .accept(MediaType.valueOf(queryFromKafkaStateStore.getAccept()))
                 .retrieve()
                 .onStatus(

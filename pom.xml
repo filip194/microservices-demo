@@ -34,6 +34,7 @@
         <module>kafka/kafka-producer</module>
         <module>kafka-to-elastic-service</module>
         <module>kafka-streams-service</module>
+        <module>mdc-interceptor</module>
         <module>reactive-elastic-query-service</module>
         <module>twitter-to-kafka-service</module>
         <module>reactive-elastic-query-web-client</module>
@@ -87,6 +88,14 @@
             <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
+
+    <dependencies>
+        <!-- will be inherited by child pom.xml files automatically-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -225,6 +234,11 @@
                 <version>${elastic.version}</version>
             </dependency>
             <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc-openapi-ui.version}</version>
@@ -284,7 +298,7 @@
             <dependency>
                 <groupId>com.microservices.demo</groupId>
                 <artifactId>elastic-query-client</artifactId>
-                <version>1.0.0-MICROSERVICES-DEMO</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microservices.demo</groupId>
@@ -304,6 +318,11 @@
             <dependency>
                 <groupId>com.microservices.demo</groupId>
                 <artifactId>reactive-elastic-query-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microservices.demo</groupId>
+                <artifactId>mdc-interceptor</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
