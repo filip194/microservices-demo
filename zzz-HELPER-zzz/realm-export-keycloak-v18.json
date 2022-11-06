@@ -933,18 +933,18 @@
     {
       "id": "c916af4f-f85b-4d83-a797-ad1d3d10ff3b",
       "clientId": "elastic-query-web-client",
-      "baseUrl": "http://elastic-query-web-client-1:8184/elastic-query-web-client",
+      "baseUrl": "http://elastic-query-web-client:8184/elastic-query-web-client",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://elastic-query-web-client-1:8184/elastic-query-web-client",
-        "http://elastic-query-web-client-1:8184/elastic-query-web-client/login/oauth2/code/keycloak"
+        "http://elastic-query-web-client:8184/elastic-query-web-client/login/oauth2/code/keycloak",
+        "http://elastic-query-web-client:8184/elastic-query-web-client"
       ],
       "webOrigins": [
-        "http://elastic-query-web-client-1:8184"
+        "http://elastic-query-web-client:8184"
       ],
       "notBefore": 0,
       "bearerOnly": false,
