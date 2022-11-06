@@ -65,4 +65,4 @@
 </included>
 
         <!--    log levels: trace > debug > info > warn > error -->
-        <!--    correlationID is used to follow a request across all services-->
+        <!--    correlationID is used to follow a request across all services via logs-->
