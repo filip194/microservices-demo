@@ -24,3 +24,6 @@ logging:
   level:
     ROOT: INFO
     org.spring.framework.cloud.config: DEBUG
+
+log:
+  app-name: config-server

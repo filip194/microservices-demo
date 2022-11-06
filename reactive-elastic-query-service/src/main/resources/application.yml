@@ -14,3 +14,6 @@ spring:
       #uri: http://localhost:8888 # deprecated in favor of spring.config.import from Spring Boot 2.4.0
       username: spring_cloud_user
       password: '{cipher}d4403ce6ae8fc4002dcc4b21bc8051da2488ac0f8f9baceb1888d1676a1104e489abd0658f83ffc2bee354322a4e8aba'
+
+log:
+  app-name: reactive-elastic-query-service

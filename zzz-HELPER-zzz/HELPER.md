@@ -14,15 +14,17 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 
 127.0.0.1       postgres
 127.0.0.1       keycloak-authorization-server
+127.0.0.1       config-server
+127.0.0.1       config-server-ha
 127.0.0.1       elastic-query-service-1
 127.0.0.1       elastic-query-service-2
-127.0.0.1       elastic-query-web-client-1
-127.0.0.1       elastic-query-web-client-2
+127.0.0.1       elastic-query-web-client
 127.0.0.1       discovery-service-1
 127.0.0.1       discovery-service-2
 127.0.0.1       analytics-service
 127.0.0.1       kafka-streams-service
-127.0.0.1       gateway-service
+127.0.0.1       gateway-service-1
+127.0.0.1       gateway-service-2
 127.0.0.1       prometheus
 127.0.0.1       grafana
 ```
@@ -47,7 +49,7 @@ Import files for:
 
 ---
 
-Enable max virtualized memory (for dockerized services in WSL):
+Enable max virtualized memory (for dockerized services in WSL, specifically for elastic cluster):
 
 > sudo sysctl -w vm.max_map_count=262144
 
@@ -86,3 +88,25 @@ For Docker to be able to use .sh files they have to be in root group, so if need
 > kafkacat -L -b localhost:19092
 
 > kafkacat -C -b localhost:19092 -t twitter-topic
+
+## MISC
+
+---
+
+### Config server:
+
+For config server, we can either use **config-first** or **discovery-first** approach.
+Previously, we have chosen to use config-first approach.
+
+With **config-first** approach you can just add another instance and specify both instances in client's config server definition for high availability.
+All other services must be updated with config server instance URIs, but second won't be used if first is up an running.
+
+To use **discovery-first** approach we need to set spring.cloud.config.discovery.enabled variable to true in all clients. And make server a discover client.
+This approach will require an extra round trip at start-up to fetch the config. But with it, adding new instances is easy as discovery will handle it automatically.
+
+### Logback spring:
+
+Update logback.xml files to get the app-name variable value to logback.
+
+**IMPORTANT NOTE:**
+- to be able to load spring configuration variable inside logback configuration, we need to rename logback files to logback-spring.xml files, so this logback configuration will be loaded after loading application configuration.

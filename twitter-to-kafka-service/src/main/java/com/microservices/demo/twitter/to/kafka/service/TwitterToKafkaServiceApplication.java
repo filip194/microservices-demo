@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * </ul>@Scope, @PostConstruct, implementing ApplicationListener (overriding onApplicationEvent() method), implementing CommandLineRunner
  */
 
-// with slf4j logger we will log our data by definition provided in logback.xml
+// with slf4j logger we will log our data by definition provided in logback-spring.xml
 @Slf4j
 @SpringBootApplication
 // required to find Spring beans in other modules

@@ -9,6 +9,7 @@ mvnw.cmd
 !**/src/main/**/target/
 !**/src/test/**/target/
 **/docker-compose/postgres_data/
+**/docker-compose/docker-logs/
 **/docker-compose/prometheus/
 **/docker-compose/grafana/
 

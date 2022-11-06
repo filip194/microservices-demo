@@ -1,3 +1,7 @@
+# IMPORTANT! run:
+# sudo sysctl -w vm.max_map_count=262144
+# to be able to run elastic cluster on virtual systems, e.g. WSL
+
 version: '3.8'
 services: # we have 3 elastic nodes as we have 3 in kafka cluster
   elastic-1:
@@ -66,7 +70,6 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
     image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
     container_name: kibana
     hostname: kibana
-    user: root
     ports:
       - 5601:5601
     depends_on:
