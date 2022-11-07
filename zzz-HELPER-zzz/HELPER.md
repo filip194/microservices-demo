@@ -16,6 +16,9 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 127.0.0.1       keycloak-authorization-server
 127.0.0.1       config-server
 127.0.0.1       config-server-ha
+127.0.0.1       elastic-1
+127.0.0.1       elastic-2
+127.0.0.1       elastic-3
 127.0.0.1       elastic-query-service-1
 127.0.0.1       elastic-query-service-2
 127.0.0.1       elastic-query-web-client

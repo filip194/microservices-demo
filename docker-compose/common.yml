@@ -2,3 +2,5 @@ version: '3.8'
 networks:
   application:
     driver: bridge
+#    driver_opts:
+#      com.docker.network.bridge.enable_icc: "true"
