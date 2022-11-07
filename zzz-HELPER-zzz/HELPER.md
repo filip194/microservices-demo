@@ -30,6 +30,7 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 127.0.0.1       gateway-service-2
 127.0.0.1       prometheus
 127.0.0.1       grafana
+127.0.0.1       zipkin
 ```
 
 - /etc/hosts file will be overridden at each WSL startup because it is generated from %WINDIR%\System32\drivers\etc\hosts, here is the solution: https://superuser.com/questions/1150597/linux-overrides-etc-hosts-on-windows-linux-subsystem
@@ -113,3 +114,7 @@ Update logback.xml files to get the app-name variable value to logback.
 
 **IMPORTANT NOTE:**
 - to be able to load spring configuration variable inside logback configuration, we need to rename logback files to logback-spring.xml files, so this logback configuration will be loaded after loading application configuration.
+
+### Check Zipkin health:
+
+> curl -s localhost:9411/health

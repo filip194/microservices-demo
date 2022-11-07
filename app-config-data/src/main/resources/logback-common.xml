@@ -4,11 +4,14 @@
     <!--    <property name="DEV_HOME" value="./twitter-to-kafka-service/logs"/>-->
     <!--    <property name="APP_NAME" value="twitter-to-kafka-service"/>-->
 
+    <!--    correlationID is not needed anymore with Sleuth-->
+
     <!--    appender that writes to console-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %X{correlationID} %logger{36} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] %-5level %X{correlationID}
+                %logger{36} - %msg%n
             </Pattern>
         </layout>
     </appender>
@@ -19,7 +22,8 @@
         <file>${DEV_HOME}/${APP_NAME}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %X{correlationID} %logger{36} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] %-5level %X{correlationID}
+                %logger{36} - %msg%n
             </Pattern>
         </encoder>
         <!--        rolling policy to create new file when 10MB is reached, and to compress and keep old file-->
