@@ -63,7 +63,6 @@
         <spring-cloud-dependencies.version>2021.0.0</spring-cloud-dependencies.version>
         <spring-cloud-starter-circuitbreaker-reactor-resilience4j.version>2.1.0
         </spring-cloud-starter-circuitbreaker-reactor-resilience4j.version>
-        <spring-cloud-starter-zipkin.version>2.2.8.RELEASE</spring-cloud-starter-zipkin.version>
 
         <!--All versions are latest except for this one: starting from elastic 7.16.x Spring Boot startup gets broken, video 97, minute 3:35, XContentParser interface-->
         <elastic.version>7.15.2</elastic.version>
@@ -137,8 +136,8 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-zipkin</artifactId>
-                <version>${spring-cloud-starter-zipkin.version}</version>
+                <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+                <version>${spring-cloud.version}</version>
             </dependency>
             <!--            netflix eureka-->
             <dependency>
