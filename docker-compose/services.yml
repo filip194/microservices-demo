@@ -127,6 +127,7 @@ services:
       - "SPRING_ZIPKIN_BASE-URL=http://zipkin:9411" # not needed when using kafka, this is just as a proof of concept that we can use HTTP, too
       - "SPRING_ZIPKIN_SENDER_TYPE=web" # use this variable and value 'web' when you have spring-kafka dependency in your configuration but, still want to use HTTP communication between Sleuth and Zipkin
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0" # range [0.0-1.0], 1.0 meaning we want to send all the TRACE(id) and SPAN(id) data to zipkin
+      - "TWITTER_BEARER_TOKEN=${TWITTER_BEARER_TOKEN}"
     networks:
       - ${GLOBAL_NETWORK:-services}
 

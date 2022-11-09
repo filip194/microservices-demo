@@ -9,8 +9,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
@@ -19,13 +18,14 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * The same as WebSecurityConfig from elastic-query-service
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter
+public class WebSecurityConfig
 {
     private final KafkaStreamsUserDetailsService kafkaStreamsUserDetailsService;
     private final OAuth2ResourceServerProperties oAuth2ResourceServerProperties;
@@ -40,8 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         this.oAuth2ResourceServerProperties = oAuth2ResourceServerProperties;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
         http
                 .sessionManagement()
@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(kafkaStreamsUserJwtAuthConverter());
+        return http.build();
     }
 
     // using qualifier here to inject our audience validator
@@ -83,12 +84,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         return new KafkaStreamsUserJwtConverter(kafkaStreamsUserDetailsService);
     }
 
-    @Override
-    public void configure(WebSecurity webSecurity)
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer()
     {
-        webSecurity
-                .ignoring()
-                .antMatchers(pathsToIgnore);
+        return (webSecurity) -> webSecurity.ignoring().antMatchers(pathsToIgnore);
     }
 
 }

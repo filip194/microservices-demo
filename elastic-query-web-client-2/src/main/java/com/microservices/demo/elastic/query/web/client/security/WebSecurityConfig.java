@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -17,13 +17,14 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
 //@EnableWebSecurity // should be removed if using spring-boot-starter-oauth2-client
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter
+public class WebSecurityConfig
 {
     private static final String GROUPS_CLAIM = "groups";
     private static final String ROLE_PREFIX = "ROLE_";
@@ -47,8 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         return successHandler;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
         http
                 .authorizeRequests()
@@ -64,7 +65,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .oauth2Login()
                 .userInfoEndpoint()
                 .userAuthoritiesMapper(userAuthoritiesMapper());
+        return http.build();
+    }
 
+//    DEPRECATED: extends WebSecurityConfigurerAdapter
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception
+//    {
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/").permitAll()
+//                .anyRequest()
+//                .fullyAuthenticated()
+//                .and()
+//                .logout()
+//                .logoutSuccessHandler(oidcLogoutSuccessHandler())
+//                .and()
+//                .oauth2Client()
+//                .and()
+//                .oauth2Login()
+//                .userInfoEndpoint()
+//                .userAuthoritiesMapper(userAuthoritiesMapper());
         // REMOVED AS WE ARE NOT USING IN-MEMORY AUTHENTICATION ANYMORE
 //                .httpBasic()
 //                .and()
@@ -80,7 +101,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 //                .logoutSuccessUrl("/")
 //                .invalidateHttpSession(true)
 //                .deleteCookies("JSESSIONID");
-    }
+//    }
 
     // customize granted authorities with custom mapper
     private GrantedAuthoritiesMapper userAuthoritiesMapper()
