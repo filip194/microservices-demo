@@ -44,10 +44,25 @@ generateHosts = false
 
 ## Import files
 
+---
+
 Import files for:
 
 - Keycloak
 - Grafana
+- TODO: Kibana
+
+## Enable/disable mock tweets
+
+---
+
+In ```docker-compose/services.yml``` file, under ```twitter-to-kafka-service``` change environment variable:
+
+> TWITTER-TO-KAFKA-SERVICE_ENABLE-MOCK-TWEETS=false
+
+Set ```true``` to enable mock tweets, or ```false``` to disable mock tweets and use real Twitter API to stream tweets.
+
+- **NOTE:** If you are using real Twitter API, you have to set your system's env variable named: ```TWITTER_BEARER_TOKEN``` and give it value of your Twitter Bearer Token obtained from https://developer.twitter.com.
 
 ## Memory
 

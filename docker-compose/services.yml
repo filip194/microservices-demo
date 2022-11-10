@@ -120,7 +120,7 @@ services:
       - "KAFKA-CONFIG_SCHEMA-REGISTRY-URL=http://schema-registry:8081"
       # -> overwrite enable mock tweets variable in services.yml file to run application using mock tweets ->
       # -> this enables running mock tweets without the need to rebuild application and docker image!!!
-      - "TWITTER-TO-KAFKA-SERVICE_ENABLE-MOCK-TWEETS=true"
+      - "TWITTER-TO-KAFKA-SERVICE_ENABLE-MOCK-TWEETS=false"
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888,http://config-server-ha:8889"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
       - "LOG_APP-NAME=twitter-to-kafka-service"

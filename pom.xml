@@ -78,6 +78,9 @@
         <micrometer-registry-prometheus.version>1.9.0</micrometer-registry-prometheus.version>
 
         <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
+
+        <httpclient.version>4.5.13</httpclient.version>
+        <json.version>20220320</json.version>
     </properties>
 
     <!--    needed for kafka-avro dependencies-->
@@ -253,6 +256,16 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc-openapi-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
             </dependency>
 
             <!--MODULES-->

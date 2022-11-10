@@ -12,6 +12,8 @@ services:
       - "./docker-logs:/workspace/config-server/logs" # /workspace/config-server/logs directory structure inside container built by build-image maven plugin
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007 -Xms128m -Xmx256m"
+      - "LOG_APP-NAME=config-server"
+      - "SERVER_PORT=8888"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
     networks:
       - ${GLOBAL_NETWORK:-services}

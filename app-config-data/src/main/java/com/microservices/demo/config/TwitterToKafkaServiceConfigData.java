@@ -25,8 +25,14 @@ public class TwitterToKafkaServiceConfigData
     private String welcomeMessage;
 
     private Boolean enableMockTweets;
+    private Long mockSleepMs;
     private Integer mockMinTweetLength;
     private Integer mockMaxTweetLength;
-    private Long mockSleepMs;
+
+    // new twitter v2 API config
+    private String twitterV2BaseUrl;
+    private String twitterV2RulesBaseUrl;
+    private String twitterV2BearerToken;
+    // enableV2Tweets is not used here because it won't be used through Java code, but environment setup
 }
 
