@@ -1,3 +1,7 @@
+-- THIS SHOULD BE EXECUTED MANUALLY ON POSTGRES DB
+
+CREATE SCHEMA IF NOT EXISTS analytics AUTHORIZATION postgres;
+
 CREATE TABLE analytics.twitter_analytics
 (
     id uuid NOT NULL,

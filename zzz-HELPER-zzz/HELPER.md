@@ -42,15 +42,31 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 generateHosts = false
 ```
 
+## Manually create database tables
+
+Create databases and tables from resource folders in next modules:
+
+(open connection from pgAdmin to dockerized postgres and execute scripts from query tool)
+
+- **elastic-query-service**
+  - ```init-schema.sql```
+  - ```init-data.sql```
+- **analytics-service**
+  - ```create-anayltics-db.sql```
+
+Without these databases and data, services can not work.
+
 ## Import files
 
 ---
 
 Import files for:
 
-- Keycloak
-- Grafana
-- TODO: Kibana
+- **Keycloak**
+  - create empty realm *microservices-demo*, then import file ```realm-export-keycloak-v18.json```
+- **Grafana**
+  - import file ```microservices-demo-grafana-export.json```
+- **TODO: Kibana**
 
 ## Enable/disable mock tweets
 
@@ -133,3 +149,19 @@ Update logback.xml files to get the app-name variable value to logback.
 ### Check Zipkin health:
 
 > curl -s localhost:9411/health
+
+### Spring CLI
+
+> sdk install springboot <optional_version>
+
+> sdk version
+
+> cd ~/.sdkman/candidates/
+
+> sdk use springboot 2.7.5
+
+> spring install org.springframework.cloud:spring-cloud-cli:3.1.1
+
+> spring encrypt 'PLAIN_TEXT' --key '<_KEY_>'
+
+> spring decrypt --key '<_KEY_>' 'PLAIN_TEXT'
