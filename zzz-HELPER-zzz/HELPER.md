@@ -1,7 +1,6 @@
-# Project Setup
+# Microservices Demo Project Setup
 
 ---
-
 
 ## System hosts file
 
@@ -30,6 +29,7 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 127.0.0.1       gateway-service-2
 127.0.0.1       prometheus
 127.0.0.1       grafana
+127.0.0.1       kibana
 127.0.0.1       zipkin
 ```
 
@@ -42,7 +42,17 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 generateHosts = false
 ```
 
+## Clone Config Server Repository
+
+---
+
+Navigate to microservices-demo/ directory and clone config server repository:
+
+> git clone https://github.com/filip194/config-server-repository.git
+
 ## Manually create database tables
+
+---
 
 Create databases and tables from resource folders in next modules:
 
@@ -64,9 +74,17 @@ Import files for:
 
 - **Keycloak**
   - create empty realm *microservices-demo*, then import file ```realm-export-keycloak-v18.json```
+  - missing from json:
+    - users and assign user roles
+    - recreate and re-encrypt client secrets
+    - *Service Accounts Enabled* option must be enabled on
+      - _elastic-query-service_
+      - _elastic-query-web-client_
 - **Grafana**
-  - import file ```microservices-demo-grafana-export.json```
-- **TODO: Kibana**
+  - on http://grafana:3000 create new data source from prometheus
+    - set URL as: ```http://prometheus:9090``` and save connection
+  - import file ```microservices-demo-grafana-export.json``` to see the graphs for microservices
+- ***TODO*: Kibana**
 
 ## Enable/disable mock tweets
 
