@@ -89,34 +89,26 @@ Better way to do this for this demo project, with all client secrets and users:
 
 This way you should have all the data in Keycloak without any manual work.
 
-#### Additional: Export REALM and USERS:
+#### ADDITIONAL: - keycloak realm export/import with users -
 
-https://keepgrowing.in/tools/keycloak-in-docker-5-how-to-export-a-realm-with-users-and-secrets/
-https://keepgrowing.in/tools/keycloak-in-docker-6-how-to-import-realms-from-a-directory/
-
-docker exec -it keycloak-authorization-server /opt/jboss/keycloak/bin/standalone.sh \
--Djboss.socket.binding.port-offset=100 \
--Dkeycloak.migration.action=export \
--Dkeycloak.migration.provider=singleFile \
--Dkeycloak.migration.realmName=microservices-demo \
--Dkeycloak.migration.usersExportStrategy=REALM_FILE \
--Dkeycloak.migration.file=/tmp/export/microservices-demo-realm.json
-
-##### Keycloak v16 OR LOWER:
+##### Keycloak v16 or lower:
 
 Export/Import REALM and USERS:
 
-https://keepgrowing.in/tools/keycloak-in-docker-5-how-to-export-a-realm-with-users-and-secrets/
-https://keepgrowing.in/tools/keycloak-in-docker-6-how-to-import-realms-from-a-directory/
+- https://keepgrowing.in/tools/keycloak-in-docker-5-how-to-export-a-realm-with-users-and-secrets/
+- https://keepgrowing.in/tools/keycloak-in-docker-6-how-to-import-realms-from-a-directory/
 
-##### Keycloak v17 OR HIGHER:
+##### Keycloak v17 or higher:
+
+- https://www.keycloak.org/server/importExport
 
 Connect to docker container:
 > docker exec -it keycloak-authorization-server bin/sh
 
 Export REALM and USERS:
 
-> /opt/keycloak/bin/kc.sh export --dir /tmp/export --realm microservices-realm --users different_files --users-per-file 10
+> /opt/keycloak/bin/kc.sh export --dir /tmp/export --realm microservices-realm --users different_files --users-per-file
+> 10
 
 Import REALM and USERS:
 
