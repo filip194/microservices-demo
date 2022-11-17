@@ -33,7 +33,9 @@ Add next lines to /etc/hosts file or to %WINDIR%\System32\drivers\etc\hosts if w
 127.0.0.1       zipkin
 ```
 
-- /etc/hosts file will be overridden at each WSL startup because it is generated from %WINDIR%\System32\drivers\etc\hosts, here is the solution: https://superuser.com/questions/1150597/linux-overrides-etc-hosts-on-windows-linux-subsystem
+- /etc/hosts file will be overridden at each WSL startup because it is generated from
+  %WINDIR%\System32\drivers\etc\hosts, here is the
+  solution: https://superuser.com/questions/1150597/linux-overrides-etc-hosts-on-windows-linux-subsystem
 
 - in /etc/wsl.conf add next lines:
 
@@ -58,33 +60,76 @@ Create databases and tables from resource folders in next modules:
 
 (open connection from pgAdmin to dockerized postgres and execute scripts from query tool)
 
-- **elastic-query-service**
-  - ```init-schema.sql```
-  - ```init-data.sql```
-- **analytics-service**
-  - ```create-anayltics-db.sql```
+- **elastic-query-service** (import tables and data into public schema)
+    - ```init-schema.sql```
+    - ```init-data.sql```
+- **analytics-service** (creates new analytics schema and table)
+    - ```create-anayltics-db.sql```
 
 Without these databases and data, services can not work.
 
-## Import files
+## Import data to enable microservices
 
 ---
 
-Import files for:
+### Import Keycloak data
 
-- **Keycloak**
-  - create empty realm *microservices-demo*, then import file ```realm-export-keycloak-v18.json```
-  - missing from json:
-    - users and assign user roles
-    - recreate and re-encrypt client secrets
-    - *Service Accounts Enabled* option must be enabled on
-      - _elastic-query-service_
-      - _elastic-query-web-client_
-- **Grafana**
-  - on http://grafana:3000 create new data source from prometheus
-    - set URL as: ```http://prometheus:9090``` and save connection
-  - import file ```microservices-demo-grafana-export.json``` to see the graphs for microservices
-- ***TODO*: Kibana**
+You can either import partial realm settings (without users, and generally client secrets):
+
+- In Keycloak UI on ```http://localhost:9091``` go to _Import_ or _Create Realm_ and select
+  file ```realm-export-keycloak-v18.json``` from file browser.
+- Missing from json file for this kind of export/import:
+    - create users and assign user groups (and roles if needed)
+    - recreate and re-encrypt client secrets and update them in config server
+
+Better way to do this for this demo project, with all client secrets and users:
+
+- connect to docker container: ```docker exec -it keycloak-authorization-server bin/sh```
+- execute command: ```/opt/keycloak/bin/kc.sh import --dir /tmp/export --override true```
+
+This way you should have all the data in Keycloak without any manual work.
+
+#### Additional: Export REALM and USERS:
+
+https://keepgrowing.in/tools/keycloak-in-docker-5-how-to-export-a-realm-with-users-and-secrets/
+https://keepgrowing.in/tools/keycloak-in-docker-6-how-to-import-realms-from-a-directory/
+
+docker exec -it keycloak-authorization-server /opt/jboss/keycloak/bin/standalone.sh \
+-Djboss.socket.binding.port-offset=100 \
+-Dkeycloak.migration.action=export \
+-Dkeycloak.migration.provider=singleFile \
+-Dkeycloak.migration.realmName=microservices-demo \
+-Dkeycloak.migration.usersExportStrategy=REALM_FILE \
+-Dkeycloak.migration.file=/tmp/export/microservices-demo-realm.json
+
+##### Keycloak v16 OR LOWER:
+
+Export/Import REALM and USERS:
+
+https://keepgrowing.in/tools/keycloak-in-docker-5-how-to-export-a-realm-with-users-and-secrets/
+https://keepgrowing.in/tools/keycloak-in-docker-6-how-to-import-realms-from-a-directory/
+
+##### Keycloak v17 OR HIGHER:
+
+Connect to docker container:
+> docker exec -it keycloak-authorization-server bin/sh
+
+Export REALM and USERS:
+
+> /opt/keycloak/bin/kc.sh export --dir /tmp/export --realm microservices-realm --users different_files --users-per-file 10
+
+Import REALM and USERS:
+
+> /opt/keycloak/bin/kc.sh import --dir /tmp/export --override true
+
+### Import Grafana graphs config
+
+On http://grafana:3000 create new data source from prometheus:
+
+- set URL as: ```http://prometheus:9090``` and save connection
+- import file ```microservices-demo-grafana-export.json``` to see the graphs for microservices
+
+### Import Kibana config (TODO)
 
 ## Enable/disable mock tweets
 
@@ -96,7 +141,9 @@ In ```docker-compose/services.yml``` file, under ```twitter-to-kafka-service``` 
 
 Set ```true``` to enable mock tweets, or ```false``` to disable mock tweets and use real Twitter API to stream tweets.
 
-- **NOTE:** If you are using real Twitter API, you have to set your system's env variable named: ```TWITTER_BEARER_TOKEN``` and give it value of your Twitter Bearer Token obtained from https://developer.twitter.com.
+- **NOTE:** If you are using real Twitter API, you have to set your system's env variable
+  named: ```TWITTER_BEARER_TOKEN``` and give it value of your Twitter Bearer Token obtained
+  from https://developer.twitter.com.
 
 ## Memory
 
@@ -121,14 +168,13 @@ For Docker to be able to use .sh files they have to be in root group, so if need
 ---
 
 - L - list
-- b	- brokers
-- C	- consumer
-- t	- topic
+- b - brokers
+- C - consumer
+- t - topic
 
 > kafkacat -L -b HOST:PORT
 
 > kafkacat -C -b HOST:PORT -t TOPIC_NAME
-
 
 ### WINDOWS (with Git Bash and Docker Desktop installed):
 
@@ -151,18 +197,23 @@ For Docker to be able to use .sh files they have to be in root group, so if need
 For config server, we can either use **config-first** or **discovery-first** approach.
 Previously, we have chosen to use config-first approach.
 
-With **config-first** approach you can just add another instance and specify both instances in client's config server definition for high availability.
+With **config-first** approach you can just add another instance and specify both instances in client's config server
+definition for high availability.
 All other services must be updated with config server instance URIs, but second won't be used if first is up an running.
 
-To use **discovery-first** approach we need to set spring.cloud.config.discovery.enabled variable to true in all clients. And make server a discover client.
-This approach will require an extra round trip at start-up to fetch the config. But with it, adding new instances is easy as discovery will handle it automatically.
+To use **discovery-first** approach we need to set spring.cloud.config.discovery.enabled variable to true in all
+clients. And make server a discover client.
+This approach will require an extra round trip at start-up to fetch the config. But with it, adding new instances is
+easy as discovery will handle it automatically.
 
 ### Logback spring:
 
 Update logback.xml files to get the app-name variable value to logback.
 
 **IMPORTANT NOTE:**
-- to be able to load spring configuration variable inside logback configuration, we need to rename logback files to logback-spring.xml files, so this logback configuration will be loaded after loading application configuration.
+
+- to be able to load spring configuration variable inside logback configuration, we need to rename logback files to
+  logback-spring.xml files, so this logback configuration will be loaded after loading application configuration.
 
 ### Check Zipkin health:
 

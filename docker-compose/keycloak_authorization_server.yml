@@ -41,6 +41,8 @@ services:
     ports:
       - "9091:9091"
     user: root
+    volumes:
+      - ./keycloak/realms/export:/tmp/export
     environment:
       - "KEYCLOAK_ADMIN=admin"
       - "KEYCLOAK_ADMIN_PASSWORD=admin"

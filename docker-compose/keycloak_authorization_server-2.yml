@@ -41,6 +41,8 @@ services:
     ports:
       - "9097:9097"
     user: root
+    volumes:
+      - ./keycloak/realms/export:/tmp/export
     environment:
       - "KEYCLOAK_ADMIN=admin"
       - "KEYCLOAK_ADMIN_PASSWORD=admin"
@@ -50,7 +52,8 @@ services:
       - "KC_DB_PASSWORD=keycloak"
       - "KC_DB_SCHEMA=public" # only public schema works?
       - "KC_DB_URL_DATABASE=keycloak" # database to use
-      - "KC_DB_URL_HOST=postgres" # postgres service defined above
+      - "KC_DB_URL_HOST=postgres-2" # postgres service defined above
+      - "KC_DB_URL_PORT=5437"
     depends_on:
       - postgres-2
     networks:
