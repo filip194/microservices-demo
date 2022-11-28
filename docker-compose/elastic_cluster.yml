@@ -20,7 +20,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
         soft: -1
         hard: -1
     volumes: # to keep data persistence after restarting this file
-      - data01_7_15_2:/usr/share/elasticsearch/data
+      - data01_7_17_4:/usr/share/elasticsearch/data
     ports: # ports set only for elastic-1 node which is enough to reach this cluster from outside of container
       - "9200:9200"
     networks: # network set from .env file as for other services so docker images can communicate one with another
@@ -41,7 +41,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
         soft: -1
         hard: -1
     volumes:
-      - data02_7_15_2:/usr/share/elasticsearch/data
+      - data02_7_17_4:/usr/share/elasticsearch/data
     networks:
       - ${GLOBAL_NETWORK:-elastic}
   elastic-3:
@@ -60,7 +60,7 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
         soft: -1
         hard: -1
     volumes:
-      - data03_7_15_2:/usr/share/elasticsearch/data
+      - data03_7_17_4:/usr/share/elasticsearch/data
     networks:
       - ${GLOBAL_NETWORK:-elastic}
   kibana:
@@ -99,9 +99,9 @@ services: # we have 3 elastic nodes as we have 3 in kafka cluster
       - ${GLOBAL_NETWORK:-elastic}
 
 volumes:
-  data01_7_15_2:
+  data01_7_17_4:
     driver: local
-  data02_7_15_2:
+  data02_7_17_4:
     driver: local
-  data03_7_15_2:
+  data03_7_17_4:
     driver: local
