@@ -1,10 +1,19 @@
 package com.microservices.demo.elastic.query.service.api;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-
+import com.microservices.demo.elastic.query.service.business.ElasticQueryService;
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceRequestModel;
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
+import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceAnalyticsResponseModel;
+import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceResponseModelV2;
+import com.microservices.demo.elastic.query.service.security.TwitterQueryUser;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -12,27 +21,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.microservices.demo.elastic.query.service.business.ElasticQueryService;
-import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceRequestModel;
-import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
-import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceAnalyticsResponseModel;
-import com.microservices.demo.elastic.query.service.model.ElasticQueryServiceResponseModelV2;
-import com.microservices.demo.elastic.query.service.security.TwitterQueryUser;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
 @Slf4j
 // isAuthenticated() is method from inside @PreAuthorize annotation, so it will only serve the authenticated user
@@ -43,15 +34,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/documents", produces = "application/vnd.api.v1+json")
 
-public class ElasticDocumentController
-{
+public class ElasticDocumentController {
     private final ElasticQueryService elasticQueryService;
 
     @Value("${server.port}")
     private String port;
 
-    public ElasticDocumentController(ElasticQueryService elasticQueryService)
-    {
+    public ElasticDocumentController(ElasticQueryService elasticQueryService) {
         this.elasticQueryService = elasticQueryService;
     }
 
@@ -60,7 +49,7 @@ public class ElasticDocumentController
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
                     @Content(mediaType = "application/vnd.api.v1+json",
-                    schema = @Schema(implementation = ElasticQueryServiceResponseModel.class))
+                            schema = @Schema(implementation = ElasticQueryServiceResponseModel.class))
             }),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "404", description = "Not found"),
@@ -68,8 +57,7 @@ public class ElasticDocumentController
     })
     @GetMapping("")
     public @ResponseBody
-    ResponseEntity<List<ElasticQueryServiceResponseModel>> getAllDocuments()
-    {
+    ResponseEntity<List<ElasticQueryServiceResponseModel>> getAllDocuments() {
         final List<ElasticQueryServiceResponseModel> response = elasticQueryService.getAllDocuments();
         log.info("Elasticsearch returned {} of documents", response.size());
         return ResponseEntity.ok(response);
@@ -88,8 +76,7 @@ public class ElasticDocumentController
     })
     @GetMapping("/{id}")
     public @ResponseBody
-    ResponseEntity<ElasticQueryServiceResponseModel> getDocumentById(@PathVariable @NotEmpty String id)
-    {
+    ResponseEntity<ElasticQueryServiceResponseModel> getDocumentById(@PathVariable @NotEmpty String id) {
         final ElasticQueryServiceResponseModel elasticQueryServiceResponseModel = elasticQueryService.getDocumentById(
                 id);
         log.info("Elasticsearch returned document with id {}", id);
@@ -108,8 +95,7 @@ public class ElasticDocumentController
     })
     @GetMapping(value = "/{id}", produces = "application/vnd.api.v2+json")
     public @ResponseBody
-    ResponseEntity<ElasticQueryServiceResponseModelV2> getDocumentByIdV2(@PathVariable @NotEmpty String id)
-    {
+    ResponseEntity<ElasticQueryServiceResponseModelV2> getDocumentByIdV2(@PathVariable @NotEmpty String id) {
         final ElasticQueryServiceResponseModel elasticQueryServiceResponseModel = elasticQueryService.getDocumentById(
                 id);
         final ElasticQueryServiceResponseModelV2 responseModelV2 = getV2Model(elasticQueryServiceResponseModel);
@@ -134,8 +120,7 @@ public class ElasticDocumentController
     ResponseEntity<ElasticQueryServiceAnalyticsResponseModel> getDocumentByText(
             @RequestBody @Valid ElasticQueryServiceRequestModel elasticQueryServiceRequestModel,
             @AuthenticationPrincipal TwitterQueryUser principal,
-            @RegisteredOAuth2AuthorizedClient("keycloak") OAuth2AuthorizedClient oAuth2AuthorizedClient)
-    {
+            @RegisteredOAuth2AuthorizedClient("keycloak") OAuth2AuthorizedClient oAuth2AuthorizedClient) {
         log.info("User {} querying documents for text {}", principal.getUsername(),
                 elasticQueryServiceRequestModel.getText());
 
@@ -149,8 +134,7 @@ public class ElasticDocumentController
         return ResponseEntity.ok(response);
     }
 
-    private ElasticQueryServiceResponseModelV2 getV2Model(ElasticQueryServiceResponseModel responseModel)
-    {
+    private ElasticQueryServiceResponseModelV2 getV2Model(ElasticQueryServiceResponseModel responseModel) {
         final ElasticQueryServiceResponseModelV2 responseModelV2 = ElasticQueryServiceResponseModelV2.builder()
                 .id(Long.parseLong(responseModel.getId()))
                 .userId(responseModel.getUserId())

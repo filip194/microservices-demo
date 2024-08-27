@@ -1,11 +1,10 @@
 package com.microservices.demo.elastic.index.client.service;
 
-import java.util.List;
-
 import com.microservices.demo.elastic.model.index.IndexModel;
 
+import java.util.List;
+
 @FunctionalInterface
-public interface ElasticIndexClient<T extends IndexModel>
-{
+public interface ElasticIndexClient<T extends IndexModel> {
     List<String> save(List<T> documents);
 }

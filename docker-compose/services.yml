@@ -74,6 +74,7 @@ services:
       - "LOG_APP-NAME=config-server"
       - "SERVER_PORT=8888"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -92,6 +93,7 @@ services:
       - "LOG_APP-NAME=config-server-ha"
       - "SERVER_PORT=8889"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -123,11 +125,11 @@ services:
       - "KAFKA-CONFIG_SCHEMA-REGISTRY-URL=http://schema-registry:8081"
       # -> overwrite enable mock tweets variable in services.yml file to run application using mock tweets ->
       # -> this enables running mock tweets without the need to rebuild application and docker image!!!
-      - "TWITTER-TO-KAFKA-SERVICE_ENABLE-MOCK-TWEETS=false"
+      - "TWITTER-TO-KAFKA-SERVICE_ENABLE-MOCK-TWEETS=true"
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888,http://config-server-ha:8889"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
       - "LOG_APP-NAME=twitter-to-kafka-service"
-      - "SPRING_ZIPKIN_BASE-URL=http://zipkin:9411" # not needed when using kafka, this is just as a proof of concept that we can use HTTP, too
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411" # not needed when using kafka, this is just as a proof of concept that we can use HTTP, too
       - "SPRING_ZIPKIN_SENDER_TYPE=web" # use this variable and value 'web' when you have spring-kafka dependency in your configuration but, still want to use HTTP communication between Sleuth and Zipkin
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0" # range [0.0-1.0], 1.0 meaning we want to send all the TRACE(id) and SPAN(id) data to zipkin
       - "TWITTER_BEARER_TOKEN=${TWITTER_BEARER_TOKEN}"
@@ -163,13 +165,14 @@ services:
       - "KAFKA-CONFIG_SCHEMA-REGISTRY-URL=http://schema-registry:8081"
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888,http://config-server-ha:8889"
       - "ELASTIC-CONFIG_INDEX-NAME=twitter-index"
-      - "ELASTIC-CONFIG_CONNECTION-URL=http://elastic-1:9200"
+      - "ELASTIC-CONFIG_CONNECTION-URL=elastic-1:9200"
       - "ENCRYPT_KEY=${ENCRYPT_KEY}"
       - "LOG_APP-NAME=kafka-to-elastic-service"
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka" # base-url not needed with kafka, # kafka topic 'zipkin' will be created automatically when using this flow
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092" # zipkin will consume the data and put it on it's own persistent store (mysql in this case)
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
       - "SPRING_DATA_ELASTICSEARCH_CLIENT_REACTIVE_ENDPOINTS=elastic-1:9200"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -197,7 +200,7 @@ services:
       - "LOGGING_LEVEL_COM_MICROSERVICES_DEMO=info"
       - "LOGGING_LEVEL_ROOT=info"
       - "ELASTIC-CONFIG_INDEX-NAME=twitter-index"
-      - "ELASTIC-CONFIG_CONNECTION-URL=http://elastic-1:9200"
+      - "ELASTIC-CONFIG_CONNECTION-URL=elastic-1:9200"
       - "SERVER_PORT=8183"
       - "SERVER_SERVLET_CONTEXT-PATH=/"
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888,http://config-server-ha:8889"
@@ -213,6 +216,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -240,7 +244,7 @@ services:
       - "LOGGING_LEVEL_COM_MICROSERVICES_DEMO=info"
       - "LOGGING_LEVEL_ROOT=info"
       - "ELASTIC-CONFIG_INDEX-NAME=twitter-index"
-      - "ELASTIC-CONFIG_CONNECTION-URL=http://elastic-1:9200"
+      - "ELASTIC-CONFIG_CONNECTION-URL=elastic-1:9200"
       - "SERVER_PORT=8186"
       - "SERVER_SERVLET_CONTEXT-PATH=/"
       - "SPRING_CLOUD_CONFIG_URI=http://config-server:8888,http://config-server-ha:8889"
@@ -257,6 +261,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -297,6 +302,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -411,6 +417,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -447,6 +454,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -519,6 +527,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 
@@ -549,6 +558,7 @@ services:
       - "SPRING_ZIPKIN_SENDER_TYPE=kafka"
       - "SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"
       - "SPRING_SLEUTH_SAMPLER_PROBABILITY=1.0"
+      - "MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411"
     networks:
       - ${GLOBAL_NETWORK:-services}
 

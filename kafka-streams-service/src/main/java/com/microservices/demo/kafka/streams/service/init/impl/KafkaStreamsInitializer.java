@@ -1,29 +1,24 @@
 package com.microservices.demo.kafka.streams.service.init.impl;
 
-import org.springframework.stereotype.Component;
-
 import com.microservices.demo.config.KafkaConfigData;
 import com.microservices.demo.kafka.admin.client.KafkaAdminClient;
 import com.microservices.demo.kafka.streams.service.init.StreamsInitializer;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class KafkaStreamsInitializer implements StreamsInitializer
-{
+public class KafkaStreamsInitializer implements StreamsInitializer {
     private final KafkaConfigData kafkaConfigData;
     private final KafkaAdminClient kafkaAdminClient;
 
-    public KafkaStreamsInitializer(KafkaConfigData kafkaConfigData, KafkaAdminClient kafkaAdminClient)
-    {
+    public KafkaStreamsInitializer(KafkaConfigData kafkaConfigData, KafkaAdminClient kafkaAdminClient) {
         this.kafkaConfigData = kafkaConfigData;
         this.kafkaAdminClient = kafkaAdminClient;
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         kafkaAdminClient.checkTopicsCreated();
         kafkaAdminClient.checkSchemaRegistry();
         log.info("Topics with names {} are ready for operations!", kafkaConfigData.getTopicNamesToCreate().toArray());

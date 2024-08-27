@@ -1,25 +1,22 @@
 package com.microservices.demo.config;
 
-import java.util.List;
-
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.Data;
+import java.util.List;
 
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "elastic-query-web-client")
-public class ElasticQueryWebClientConfigData
-{
+public class ElasticQueryWebClientConfigData {
     // this will automatically use prefix "webclient" from configuration yml file
     // 'config-client-elastic_query_web_client.yml'
     private WebClient webClient;
     private Query queryByText;
 
     @Data
-    public static class WebClient
-    {
+    public static class WebClient {
         private Integer connectTimeoutMs;
         private Integer readTimeoutMs;
         private Integer writeTimeoutMs;
@@ -32,16 +29,14 @@ public class ElasticQueryWebClientConfigData
     }
 
     @Data
-    public static class Query
-    {
+    public static class Query {
         private String method;
         private String accept;
         private String uri;
     }
 
     @Data
-    public static class Instance
-    {
+    public static class Instance {
         private String id;
         private String host;
         private Integer port;

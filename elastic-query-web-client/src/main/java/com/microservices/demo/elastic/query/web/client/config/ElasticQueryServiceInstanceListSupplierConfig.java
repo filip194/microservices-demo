@@ -1,7 +1,7 @@
 package com.microservices.demo.elastic.query.web.client.config;
 
 /**
- *  Deprecated as we removed @LoadBalancerClient from WebClientConfig and introduced eureka
+ * Deprecated as we removed @LoadBalancerClient from WebClientConfig and introduced eureka
  */
 
 @Deprecated

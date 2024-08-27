@@ -8,10 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan(basePackages = "com.microservices.demo")
-public class ElasticQueryWebClientApplication
-{
-    public static void main(String[] args)
-    {
+public class ElasticQueryWebClientApplication {
+    public static void main(String[] args) {
         SpringApplication.run(ElasticQueryWebClientApplication.class, args);
     }
 }

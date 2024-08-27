@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QueryServiceFallbackModel
-{
+public class QueryServiceFallbackModel {
     private String fallbackMessage;
 }
 

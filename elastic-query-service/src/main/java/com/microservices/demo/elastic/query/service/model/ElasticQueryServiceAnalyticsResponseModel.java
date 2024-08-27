@@ -16,8 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ElasticQueryServiceAnalyticsResponseModel
-{
+public class ElasticQueryServiceAnalyticsResponseModel {
     private List<ElasticQueryServiceResponseModel> elasticQueryServiceResponseModels;
     private Long wordCount;
 }

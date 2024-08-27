@@ -8,8 +8,7 @@ import java.util.Collection;
  * @param <T>  entity type
  * @param <PK> primary key
  */
-public interface AnalyticsCustomRepository<T, PK>
-{
+public interface AnalyticsCustomRepository<T, PK> {
     <S extends T> PK persist(S entity);
 
     <S extends T> void batchPersist(Collection<S> entities);

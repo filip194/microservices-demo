@@ -1,5 +1,22 @@
 package com.microservices.demo.kafka.streams.service.runner.impl;
 
+import com.microservices.demo.config.KafkaConfigData;
+import com.microservices.demo.config.KafkaStreamsConfigData;
+import com.microservices.demo.kafka.avro.model.TwitterAnalyticsAvroModel;
+import com.microservices.demo.kafka.avro.model.TwitterAvroModel;
+import com.microservices.demo.kafka.streams.service.runner.StreamsRunner;
+import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
+import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.serialization.Serde;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.*;
+import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.QueryableStoreTypes;
+import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -8,38 +25,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import javax.annotation.PreDestroy;
-
-import org.apache.kafka.common.serialization.Serde;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.StoreQueryParameters;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KeyValueMapper;
-import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Produced;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import com.microservices.demo.config.KafkaConfigData;
-import com.microservices.demo.config.KafkaStreamsConfigData;
-import com.microservices.demo.kafka.avro.model.TwitterAnalyticsAvroModel;
-import com.microservices.demo.kafka.avro.model.TwitterAvroModel;
-import com.microservices.demo.kafka.streams.service.runner.StreamsRunner;
-
-import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Component
-public class KafkaStreamsRunner implements StreamsRunner<String, Long>
-{
+public class KafkaStreamsRunner implements StreamsRunner<String, Long> {
     // matches any number character in the text
     private static final String REGEX = "\\W+";
 
@@ -51,16 +39,14 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
     private volatile ReadOnlyKeyValueStore<String, Long> keyValueStore;
 
     public KafkaStreamsRunner(KafkaStreamsConfigData kafkaStreamsConfigData, KafkaConfigData kafkaConfigData,
-            @Qualifier("streamsConfiguration") Properties streamsConfiguration)
-    {
+                              @Qualifier("streamsConfiguration") Properties streamsConfiguration) {
         this.kafkaStreamsConfigData = kafkaStreamsConfigData;
         this.kafkaConfigData = kafkaConfigData;
         this.streamsConfiguration = streamsConfiguration;
     }
 
     @Override
-    public void start()
-    {
+    public void start() {
         final Map<String, String> serdeConfig = Collections.singletonMap(
                 kafkaConfigData.getSchemaRegistryUrlKey(),
                 kafkaConfigData.getSchemaRegistryUrl()
@@ -78,16 +64,11 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
     }
 
     @Override
-    public Long getValueByKey(String word)
-    {
-        if (kafkaStreams != null && kafkaStreams.state() == KafkaStreams.State.RUNNING)
-        {
-            if (keyValueStore == null)
-            {
-                synchronized (this)
-                {
-                    if (keyValueStore == null)
-                    {
+    public Long getValueByKey(String word) {
+        if (kafkaStreams != null && kafkaStreams.state() == KafkaStreams.State.RUNNING) {
+            if (keyValueStore == null) {
+                synchronized (this) {
+                    if (keyValueStore == null) {
                         keyValueStore = kafkaStreams.store(StoreQueryParameters.fromNameAndType(
                                 kafkaStreamsConfigData.getWordCountStoreName(),
                                 QueryableStoreTypes.keyValueStore()
@@ -101,10 +82,8 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
     }
 
     @PreDestroy
-    public void close()
-    {
-        if(kafkaStreams != null)
-        {
+    public void close() {
+        if (kafkaStreams != null) {
             kafkaStreams.close();
             log.info("Kafka streaming closed!");
         }
@@ -112,8 +91,7 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
 
     // TOPOLOGY in Kafka streams terminology is computation logic
     private void createTopology(KStream<Long, TwitterAvroModel> twitterAvroModelKStream,
-            Map<String, String> serdeConfig)
-    {
+                                Map<String, String> serdeConfig) {
         final Pattern pattern = Pattern.compile(REGEX, Pattern.UNICODE_CHARACTER_CLASS);
 
         // create a method getSerdeAnalyticsModel to create and return the output model Serde
@@ -135,8 +113,7 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
                         Produced.with(Serdes.String(), serdeTwitterAnalyticsAvroModel));
     }
 
-    private void startStreaming(StreamsBuilder streamsBuilder)
-    {
+    private void startStreaming(StreamsBuilder streamsBuilder) {
         final Topology topology = streamsBuilder.build();
         log.info("Defined topology: {}", topology.describe());
         kafkaStreams = new KafkaStreams(topology, streamsConfiguration);
@@ -145,8 +122,7 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
     }
 
     private KeyValueMapper<String, Long, KeyValue<? extends String, ? extends TwitterAnalyticsAvroModel>>
-    mapToAnalyticsModel()
-    {
+    mapToAnalyticsModel() {
         return (word, count) -> {
             log.info("Sending to topic {}, word {} - count {}",
                     kafkaStreamsConfigData.getOutputTopicName(), word, count);
@@ -159,16 +135,14 @@ public class KafkaStreamsRunner implements StreamsRunner<String, Long>
         };
     }
 
-    private Serde<TwitterAnalyticsAvroModel> getSerdeAnalyticsAvroModel(Map<String, String> serdeConfig)
-    {
+    private Serde<TwitterAnalyticsAvroModel> getSerdeAnalyticsAvroModel(Map<String, String> serdeConfig) {
         final Serde<TwitterAnalyticsAvroModel> serdeTwitterAnalyticsAvroModel = new SpecificAvroSerde<>();
         serdeTwitterAnalyticsAvroModel.configure(serdeConfig, false);
         return serdeTwitterAnalyticsAvroModel;
     }
 
     private KStream<Long, TwitterAvroModel> getTwitterAvroModelKStream(Map<String, String> serdeConfig,
-            StreamsBuilder streamsBuilder)
-    {
+                                                                       StreamsBuilder streamsBuilder) {
         // Serde class specifies serialization object; there are predefined types like String and Long, or
         // we can use custom Serde serialization object with generics and use SpecificAvroSerde<> class
         // here we created spefici Serde for input topic with type TwitterAvroModel

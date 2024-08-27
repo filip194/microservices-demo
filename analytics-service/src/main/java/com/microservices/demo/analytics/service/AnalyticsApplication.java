@@ -8,10 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan(basePackages = "com.microservices.demo")
-public class AnalyticsApplication
-{
-    public static void main(String[] args)
-    {
+public class AnalyticsApplication {
+    public static void main(String[] args) {
         SpringApplication.run(AnalyticsApplication.class, args);
     }
 }

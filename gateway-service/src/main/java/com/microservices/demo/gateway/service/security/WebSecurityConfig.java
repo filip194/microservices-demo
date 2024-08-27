@@ -6,8 +6,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-public class WebSecurityConfig
-{
+public class WebSecurityConfig {
     // we will allow all paths
     // we won't apply any security here because we are applying it on the forwarded services
     // that's a design decision
@@ -16,8 +15,7 @@ public class WebSecurityConfig
     // but, it is safer to use security on service itself because service can be called from somewhere else instead of gateway
 
     @Bean
-    public SecurityWebFilterChain webFluxSecurityConfig(ServerHttpSecurity httpSecurity)
-    {
+    public SecurityWebFilterChain webFluxSecurityConfig(ServerHttpSecurity httpSecurity) {
         httpSecurity
                 .authorizeExchange()
                 .anyExchange()

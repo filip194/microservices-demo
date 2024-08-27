@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ElasticQueryServiceWordCountResponseModel
-{
+public class ElasticQueryServiceWordCountResponseModel {
     private String word;
     private Long wordCount;
 }

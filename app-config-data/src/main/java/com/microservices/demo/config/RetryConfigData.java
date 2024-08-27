@@ -1,9 +1,8 @@
 package com.microservices.demo.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import lombok.Data;
 
 /**
  * This class will hold configuration data for Retry templates creation.
@@ -11,8 +10,7 @@ import lombok.Data;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "retry-config")
-public class RetryConfigData
-{
+public class RetryConfigData {
     private Long initialIntervalMs;
     private Long maxIntervalMs;
     private Double multiplier;

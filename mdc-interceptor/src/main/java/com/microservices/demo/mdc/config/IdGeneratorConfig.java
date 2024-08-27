@@ -6,11 +6,9 @@ import org.springframework.util.IdGenerator;
 import org.springframework.util.JdkIdGenerator;
 
 @Configuration
-public class IdGeneratorConfig
-{
+public class IdGeneratorConfig {
     @Bean
-    public IdGenerator idGenerator()
-    {
+    public IdGenerator idGenerator() {
         return new JdkIdGenerator();
     }
 }

@@ -18,13 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 // @ControllerAdvice annotation -> used to create a global exception handler
 @ControllerAdvice
-public class ElasticQueryWebClientErrorHandler
-{
+public class ElasticQueryWebClientErrorHandler {
     // putting error on the model objects to be able to show the error message
 
     @ExceptionHandler(AccessDeniedException.class)
-    public String handle(AccessDeniedException e, Model model)
-    {
+    public String handle(AccessDeniedException e, Model model) {
         log.error("Access denied exception!");
         model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
         model.addAttribute("error_description", "You are not authorized to access this resource!");
@@ -32,8 +30,7 @@ public class ElasticQueryWebClientErrorHandler
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public String handle(IllegalArgumentException e, Model model)
-    {
+    public String handle(IllegalArgumentException e, Model model) {
         log.error("Illegal argument exception!", e);
         model.addAttribute("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
         model.addAttribute("error_description", "Illegal argument exception! " + e.getMessage());
@@ -41,8 +38,7 @@ public class ElasticQueryWebClientErrorHandler
     }
 
     @ExceptionHandler(Exception.class)
-    public String handle(Exception e, Model model)
-    {
+    public String handle(Exception e, Model model) {
         log.error("Internal server error!", e);
         model.addAttribute("error", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         model.addAttribute("error_description", "A server error occurred!");
@@ -52,8 +48,7 @@ public class ElasticQueryWebClientErrorHandler
     // returning 'home' -> showing user errors on the home page
 
     @ExceptionHandler(RuntimeException.class)
-    public String handle(RuntimeException e, Model model)
-    {
+    public String handle(RuntimeException e, Model model) {
         log.error("Service runtime exception!", e);
         model.addAttribute("elasticQueryWebClientRequestModel", ElasticQueryWebClientRequestModel.builder().build());
         model.addAttribute("error", "Could not get response! " + e.getMessage());
@@ -61,9 +56,8 @@ public class ElasticQueryWebClientErrorHandler
         return "home";
     }
 
-    @ExceptionHandler({ BindException.class })
-    public String handle(BindException e, Model model)
-    {
+    @ExceptionHandler({BindException.class})
+    public String handle(BindException e, Model model) {
         log.error("Method argument validation exception!", e);
 
         final Map<String, String> errors = new HashMap<>();

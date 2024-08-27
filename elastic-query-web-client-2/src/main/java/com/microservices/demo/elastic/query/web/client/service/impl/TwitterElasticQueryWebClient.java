@@ -1,5 +1,12 @@
 package com.microservices.demo.elastic.query.web.client.service.impl;
 
+import com.microservices.demo.config.ElasticQueryWebClientConfigData;
+import com.microservices.demo.elastic.query.web.client.common.exception.ElasticQueryWebClientException;
+import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientAnalyticsResponseModel;
+import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientRequestModel;
+import com.microservices.demo.elastic.query.web.client.service.ElasticQueryWebClient;
+import com.microservices.demo.mdc.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -10,42 +17,29 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import com.microservices.demo.config.ElasticQueryWebClientConfigData;
-import com.microservices.demo.elastic.query.web.client.common.exception.ElasticQueryWebClientException;
-import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientAnalyticsResponseModel;
-import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientRequestModel;
-import com.microservices.demo.elastic.query.web.client.service.ElasticQueryWebClient;
-import com.microservices.demo.mdc.Constants;
-
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
-{
+public class TwitterElasticQueryWebClient implements ElasticQueryWebClient {
     private final WebClient.Builder webClientBuilder;
     private final ElasticQueryWebClientConfigData elasticQueryWebClientConfigData;
 
     public TwitterElasticQueryWebClient(@Qualifier("webClientBuilder") WebClient.Builder webClientBuilder,
-            ElasticQueryWebClientConfigData elasticQueryWebClientConfigData)
-    {
+                                        ElasticQueryWebClientConfigData elasticQueryWebClientConfigData) {
         this.webClientBuilder = webClientBuilder;
         this.elasticQueryWebClientConfigData = elasticQueryWebClientConfigData;
     }
 
     @Override
-    public ElasticQueryWebClientAnalyticsResponseModel getDataByText(ElasticQueryWebClientRequestModel requestModel)
-    {
+    public ElasticQueryWebClientAnalyticsResponseModel getDataByText(ElasticQueryWebClientRequestModel requestModel) {
         log.info("Querying by text {}", requestModel.getText());
         return getWebClient(requestModel)
                 .bodyToMono(ElasticQueryWebClientAnalyticsResponseModel.class)
                 .block();
     }
 
-    private WebClient.ResponseSpec getWebClient(ElasticQueryWebClientRequestModel requestModel)
-    {
+    private WebClient.ResponseSpec getWebClient(ElasticQueryWebClientRequestModel requestModel) {
         return webClientBuilder.build()
                 .method(HttpMethod.valueOf(elasticQueryWebClientConfigData.getQueryByText().getMethod()))
                 .uri(elasticQueryWebClientConfigData.getQueryByText().getUri())
@@ -58,19 +52,17 @@ public class TwitterElasticQueryWebClient implements ElasticQueryWebClient
                         clientResponse -> Mono.just(new BadCredentialsException("Not authenticated!"))
                 )
                 .onStatus(
-                        HttpStatus::is4xxClientError,
-                        clientResponse -> Mono.just(new ElasticQueryWebClientException(clientResponse.statusCode().getReasonPhrase()))
+                        httpStatus -> httpStatus.equals(HttpStatus.BAD_REQUEST),
+                        clientResponse -> Mono.just(new ElasticQueryWebClientException(clientResponse.statusCode().toString()))
                 )
                 .onStatus(
-                        HttpStatus::is5xxServerError,
-                        clientResponse -> Mono.just(new Exception(clientResponse.statusCode().getReasonPhrase()))
+                        httpStatus -> httpStatus.equals(HttpStatus.INTERNAL_SERVER_ERROR),
+                        clientResponse -> Mono.just(new Exception(clientResponse.statusCode().toString()))
                 );
     }
 
-    private <T> ParameterizedTypeReference<T> createParameterizedTypeReference()
-    {
-        return new ParameterizedTypeReference<T>()
-        {
+    private <T> ParameterizedTypeReference<T> createParameterizedTypeReference() {
+        return new ParameterizedTypeReference<T>() {
         };
     }
 }

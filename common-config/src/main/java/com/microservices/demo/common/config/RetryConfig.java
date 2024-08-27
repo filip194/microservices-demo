@@ -1,12 +1,11 @@
 package com.microservices.demo.common.config;
 
+import com.microservices.demo.config.RetryConfigData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
-
-import com.microservices.demo.config.RetryConfigData;
 
 /**
  * This class will hold a Bean definition to create RetryTemplate templates for next verifications:
@@ -22,12 +21,10 @@ import com.microservices.demo.config.RetryConfigData;
  * To create this bean we'll need some configuration data, it will be held in RetryConfigData class.
  */
 @Configuration
-public class RetryConfig
-{
+public class RetryConfig {
     private final RetryConfigData retryConfigData;
 
-    public RetryConfig(RetryConfigData retryConfigData)
-    {
+    public RetryConfig(RetryConfigData retryConfigData) {
         this.retryConfigData = retryConfigData;
     }
 
@@ -49,7 +46,7 @@ public class RetryConfig
 
         retryTemplate.setRetryPolicy(simpleRetryPolicy);
 
-        return  retryTemplate;
+        return retryTemplate;
     }
 }
 

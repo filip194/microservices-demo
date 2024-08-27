@@ -6,10 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.microservices.demo")
-public class ReactiveElasticQueryServiceApplication
-{
-    public static void main(String[] args)
-    {
+public class ReactiveElasticQueryServiceApplication {
+    public static void main(String[] args) {
         SpringApplication.run(ReactiveElasticQueryServiceApplication.class, args);
     }
 }

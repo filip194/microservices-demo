@@ -1,35 +1,30 @@
 package com.microservices.demo.kafka.streams.service.config;
 
-import java.util.Properties;
-
+import com.microservices.demo.config.KafkaConfigData;
+import com.microservices.demo.config.KafkaStreamsConfigData;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.microservices.demo.config.KafkaConfigData;
-import com.microservices.demo.config.KafkaStreamsConfigData;
-
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import java.util.Properties;
 
 @Configuration
-public class KafkaStreamsConfig
-{
+public class KafkaStreamsConfig {
 
     private final KafkaConfigData kafkaConfigData;
     private final KafkaStreamsConfigData kafkaStreamsConfigData;
 
-    public KafkaStreamsConfig(KafkaConfigData kafkaConfigData, KafkaStreamsConfigData kafkaStreamsConfigData)
-    {
+    public KafkaStreamsConfig(KafkaConfigData kafkaConfigData, KafkaStreamsConfigData kafkaStreamsConfigData) {
         this.kafkaConfigData = kafkaConfigData;
         this.kafkaStreamsConfigData = kafkaStreamsConfigData;
     }
 
     @Bean
     @Qualifier("streamConfiguration")
-    public Properties streamsConfiguration()
-    {
+    public Properties streamsConfiguration() {
         final Properties streamsConfiguration = new Properties();
         streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, kafkaStreamsConfigData.getApplicationID());
         streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigData.getBootstrapServers());

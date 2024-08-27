@@ -1,98 +1,129 @@
 {
-  "realm" : "microservices-realm",
-  "users" : [ {
-    "id" : "830fa9a5-dfe8-41d6-8571-2a5d4d292909",
-    "createdTimestamp" : 1668674472058,
-    "username" : "app_admin",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "firstName" : "Admin",
-    "lastName" : "User",
-    "credentials" : [ {
-      "id" : "b120f44a-a298-4027-bc63-d0c50e44625a",
-      "type" : "password",
-      "userLabel" : "My password",
-      "createdDate" : 1668674483243,
-      "secretData" : "{\"value\":\"8Z9bdHwdeJemz21HUMvvkSu7HGBhLCtZFYzaQFvE9gddobWdQN/iWXnjRF+zrg4eteUvGbOjSznqftzQSTejyA==\",\"salt\":\"0O1ih9MLlY0++6bEDYW1Iw==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-    } ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "app_admin_role", "default-roles-microservices-realm" ],
-    "notBefore" : 0,
-    "groups" : [ "/app_admin_group" ]
-  }, {
-    "id" : "7769cef4-29fc-48e2-88ef-2f7db1b30005",
-    "createdTimestamp" : 1668674506708,
-    "username" : "app_super_user",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "firstName" : "Super",
-    "lastName" : "User",
-    "credentials" : [ {
-      "id" : "ffa75e86-8d3c-4701-a44a-2fb885c1f870",
-      "type" : "password",
-      "userLabel" : "My password",
-      "createdDate" : 1668674514084,
-      "secretData" : "{\"value\":\"J56EpikGvq8298WlfD2oCdt735F2nVnoq16wucTspqjlBQ8a3QmcUdUKbwcUUGoXiFa9Q2sN0ZIhkN/9BCQg9A==\",\"salt\":\"cw1woU+/XR+FI0vmQofATw==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-    } ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-microservices-realm", "app_super_user_role" ],
-    "notBefore" : 0,
-    "groups" : [ "/app_super_user_group" ]
-  }, {
-    "id" : "0a41f156-fb78-4a19-86eb-dd35522288c2",
-    "createdTimestamp" : 1668674378239,
-    "username" : "app_user",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "firstName" : "App",
-    "lastName" : "User",
-    "credentials" : [ {
-      "id" : "a56cccb0-9a54-46e5-807e-2d0fd3fa51cb",
-      "type" : "password",
-      "userLabel" : "My password",
-      "createdDate" : 1668674406114,
-      "secretData" : "{\"value\":\"ou+v7c7QZ2BKrF22gaQ+5PZ1bNnP0tq9ikxrvgwJZSgshtpoeb0udueFAblSEFMhXmsB3x/fNkV+A7eTBhqYqw==\",\"salt\":\"+0JrATSi14pUMwPE9Es7fA==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-    } ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-microservices-realm", "app_user_role" ],
-    "notBefore" : 0,
-    "groups" : [ "/app_user_group" ]
-  }, {
-    "id" : "9d1b05e2-0067-497b-9ab4-f701d4454428",
-    "createdTimestamp" : 1661438250811,
-    "username" : "service-account-elastic-query-service",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "serviceAccountClientId" : "elastic-query-service",
-    "credentials" : [ ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-microservices-realm" ],
-    "notBefore" : 0,
-    "groups" : [ ]
-  }, {
-    "id" : "20687de8-b957-4045-badb-63979b7695b3",
-    "createdTimestamp" : 1668595447794,
-    "username" : "service-account-elastic-query-web-client",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "serviceAccountClientId" : "elastic-query-web-client",
-    "credentials" : [ ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-microservices-realm" ],
-    "notBefore" : 0,
-    "groups" : [ ]
-  } ]
+  "realm": "microservices-realm",
+  "users": [
+    {
+      "id": "830fa9a5-dfe8-41d6-8571-2a5d4d292909",
+      "createdTimestamp": 1668674472058,
+      "username": "app_admin",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "firstName": "Admin",
+      "lastName": "User",
+      "credentials": [
+        {
+          "id": "b120f44a-a298-4027-bc63-d0c50e44625a",
+          "type": "password",
+          "userLabel": "My password",
+          "createdDate": 1668674483243,
+          "secretData": "{\"value\":\"8Z9bdHwdeJemz21HUMvvkSu7HGBhLCtZFYzaQFvE9gddobWdQN/iWXnjRF+zrg4eteUvGbOjSznqftzQSTejyA==\",\"salt\":\"0O1ih9MLlY0++6bEDYW1Iw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "app_admin_role",
+        "default-roles-microservices-realm"
+      ],
+      "notBefore": 0,
+      "groups": [
+        "/app_admin_group"
+      ]
+    },
+    {
+      "id": "7769cef4-29fc-48e2-88ef-2f7db1b30005",
+      "createdTimestamp": 1668674506708,
+      "username": "app_super_user",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "firstName": "Super",
+      "lastName": "User",
+      "credentials": [
+        {
+          "id": "ffa75e86-8d3c-4701-a44a-2fb885c1f870",
+          "type": "password",
+          "userLabel": "My password",
+          "createdDate": 1668674514084,
+          "secretData": "{\"value\":\"J56EpikGvq8298WlfD2oCdt735F2nVnoq16wucTspqjlBQ8a3QmcUdUKbwcUUGoXiFa9Q2sN0ZIhkN/9BCQg9A==\",\"salt\":\"cw1woU+/XR+FI0vmQofATw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-microservices-realm",
+        "app_super_user_role"
+      ],
+      "notBefore": 0,
+      "groups": [
+        "/app_super_user_group"
+      ]
+    },
+    {
+      "id": "0a41f156-fb78-4a19-86eb-dd35522288c2",
+      "createdTimestamp": 1668674378239,
+      "username": "app_user",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "firstName": "App",
+      "lastName": "User",
+      "credentials": [
+        {
+          "id": "a56cccb0-9a54-46e5-807e-2d0fd3fa51cb",
+          "type": "password",
+          "userLabel": "My password",
+          "createdDate": 1668674406114,
+          "secretData": "{\"value\":\"ou+v7c7QZ2BKrF22gaQ+5PZ1bNnP0tq9ikxrvgwJZSgshtpoeb0udueFAblSEFMhXmsB3x/fNkV+A7eTBhqYqw==\",\"salt\":\"+0JrATSi14pUMwPE9Es7fA==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-microservices-realm",
+        "app_user_role"
+      ],
+      "notBefore": 0,
+      "groups": [
+        "/app_user_group"
+      ]
+    },
+    {
+      "id": "9d1b05e2-0067-497b-9ab4-f701d4454428",
+      "createdTimestamp": 1661438250811,
+      "username": "service-account-elastic-query-service",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "elastic-query-service",
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-microservices-realm"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "20687de8-b957-4045-badb-63979b7695b3",
+      "createdTimestamp": 1668595447794,
+      "username": "service-account-elastic-query-web-client",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "elastic-query-web-client",
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-microservices-realm"
+      ],
+      "notBefore": 0,
+      "groups": []
+    }
+  ]
 }

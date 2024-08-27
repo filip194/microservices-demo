@@ -1,38 +1,33 @@
 package com.microservices.demo.gateway.service.controller;
 
+import com.microservices.demo.gateway.service.model.AnalyticsDataFallbackModel;
+import com.microservices.demo.gateway.service.model.QueryServiceFallbackModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microservices.demo.gateway.service.model.AnalyticsDataFallbackModel;
-import com.microservices.demo.gateway.service.model.QueryServiceFallbackModel;
-
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @RestController
 @RequestMapping("/fallback")
-public class FallbackController
-{
+public class FallbackController {
     // these methods have to have POST mapping instead of GET, to work with Gateway service
 
     @Value("${server.port}")
     private String port;
 
     @PostMapping("/query-fallback")
-    public ResponseEntity<QueryServiceFallbackModel> queryServiceFallback()
-    {
+    public ResponseEntity<QueryServiceFallbackModel> queryServiceFallback() {
         log.info("Returning fallback result for elastic-query-service! on port {}", port);
         return ResponseEntity.ok(QueryServiceFallbackModel.builder()
-                        .fallbackMessage("Fallback result for elastic-query-service!")
-                        .build());
+                .fallbackMessage("Fallback result for elastic-query-service!")
+                .build());
     }
 
     @PostMapping("/analytics-fallback")
-    public ResponseEntity<AnalyticsDataFallbackModel> analyticsServiceFallback()
-    {
+    public ResponseEntity<AnalyticsDataFallbackModel> analyticsServiceFallback() {
         log.info("Returning fallback result for analytics-service! on port {}", port);
         return ResponseEntity.ok(AnalyticsDataFallbackModel.builder()
                 .wordCount(0L)
@@ -40,8 +35,7 @@ public class FallbackController
     }
 
     @PostMapping("/streams-fallback")
-    public ResponseEntity<AnalyticsDataFallbackModel> streamsServiceFallback()
-    {
+    public ResponseEntity<AnalyticsDataFallbackModel> streamsServiceFallback() {
         log.info("Returning fallback result for kafka-streams-service! on port {}", port);
         return ResponseEntity.ok(AnalyticsDataFallbackModel.builder()
                 .wordCount(0L)

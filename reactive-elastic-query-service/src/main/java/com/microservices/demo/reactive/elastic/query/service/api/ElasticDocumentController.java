@@ -1,29 +1,24 @@
 package com.microservices.demo.reactive.elastic.query.service.api;
 
-import javax.validation.Valid;
-
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceRequestModel;
+import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
+import com.microservices.demo.reactive.elastic.query.service.business.ElasticQueryService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceRequestModel;
-import com.microservices.demo.elastic.query.service.common.model.ElasticQueryServiceResponseModel;
-import com.microservices.demo.reactive.elastic.query.service.business.ElasticQueryService;
-
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/documents")
-public class ElasticDocumentController
-{
+public class ElasticDocumentController {
     private final ElasticQueryService elasticQueryService;
 
-    public ElasticDocumentController(ElasticQueryService elasticQueryService)
-    {
+    public ElasticDocumentController(ElasticQueryService elasticQueryService) {
         this.elasticQueryService = elasticQueryService;
     }
 
@@ -32,8 +27,7 @@ public class ElasticDocumentController
             produces = MediaType.TEXT_EVENT_STREAM_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public Flux<ElasticQueryServiceResponseModel> getDocumentByText(
-            @RequestBody @Valid ElasticQueryServiceRequestModel requestModel)
-    {
+            @RequestBody @Valid ElasticQueryServiceRequestModel requestModel) {
         Flux<ElasticQueryServiceResponseModel> response = elasticQueryService.getDocumentByText(
                 requestModel.getText());
         // log() method on response - observes all reactive stream signals and traces them using built-in logger support

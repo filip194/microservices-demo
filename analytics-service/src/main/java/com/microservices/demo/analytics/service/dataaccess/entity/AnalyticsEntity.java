@@ -1,18 +1,17 @@
 package com.microservices.demo.analytics.service.dataaccess.entity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,8 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "twitter_analytics")
-public class AnalyticsEntity implements BaseEntity<UUID>
-{
+public class AnalyticsEntity implements BaseEntity<UUID> {
     @Id
     @NotNull
     @Column(name = "id", columnDefinition = "uuid")
@@ -40,8 +38,7 @@ public class AnalyticsEntity implements BaseEntity<UUID>
     private LocalDateTime recordDate;
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -53,8 +50,7 @@ public class AnalyticsEntity implements BaseEntity<UUID>
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return id.hashCode();
     }
 }

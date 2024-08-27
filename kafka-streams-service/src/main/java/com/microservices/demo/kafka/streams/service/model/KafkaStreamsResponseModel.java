@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class KafkaStreamsResponseModel
-{
+public class KafkaStreamsResponseModel {
     private String word;
     private Long wordCount;
 }

@@ -1,9 +1,7 @@
 package com.microservices.demo.kafka.consumer.config;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.microservices.demo.config.KafkaConfigData;
+import com.microservices.demo.config.KafkaConsumerConfigData;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.context.annotation.Bean;
@@ -15,21 +13,20 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
-import com.microservices.demo.config.KafkaConfigData;
-import com.microservices.demo.config.KafkaConsumerConfigData;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 // @EnableKafka - enables detection of Kafka listener annotation
 // Spring Boot - it can be skipped as Spring Boot will automatically enable this annotation
 // Spring - must be used to detect of Kafka listener(s)
 @EnableKafka
 @Configuration
-public class KafkaConsumerConfig<K extends Serializable, V extends SpecificRecordBase>
-{
+public class KafkaConsumerConfig<K extends Serializable, V extends SpecificRecordBase> {
     private final KafkaConfigData kafkaConfigData;
     private final KafkaConsumerConfigData kafkaConsumerConfigData;
 
-    public KafkaConsumerConfig(KafkaConfigData kafkaConfigData, KafkaConsumerConfigData kafkaConsumerConfigData)
-    {
+    public KafkaConsumerConfig(KafkaConfigData kafkaConfigData, KafkaConsumerConfigData kafkaConsumerConfigData) {
         this.kafkaConfigData = kafkaConfigData;
         this.kafkaConsumerConfigData = kafkaConsumerConfigData;
     }
@@ -47,8 +44,7 @@ What should be the kafka consumer concurrency level for maximum concurrency and 
      */
 
     @Bean
-    public Map<String, Object> consumerConfigs()
-    {
+    public Map<String, Object> consumerConfigs() {
         final Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigData.getBootstrapServers());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaConsumerConfigData.getKeyDeserializer());
@@ -68,14 +64,12 @@ What should be the kafka consumer concurrency level for maximum concurrency and 
     }
 
     @Bean // KAFKA CONSUMER FACTORY -> bean that will return default Kafka consumer factory
-    public ConsumerFactory<K, V> consumerFactory()
-    {
+    public ConsumerFactory<K, V> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<K, V>> kafkaListenerContainerFactory()
-    {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<K, V>> kafkaListenerContainerFactory() {
         final ConcurrentKafkaListenerContainerFactory<K, V> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory());

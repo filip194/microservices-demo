@@ -1,37 +1,28 @@
 package com.microservices.demo.analytics.service.api;
 
-import java.util.Optional;
-
-import javax.validation.constraints.NotEmpty;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.microservices.demo.analytics.service.business.AnalyticsService;
 import com.microservices.demo.analytics.service.model.AnalyticsResponseModel;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Slf4j
 @PreAuthorize("isAuthenticated")
 @RestController
 @RequestMapping(value = "/", produces = "application/vnd.api.v1+json")
-public class AnalyticsController
-{
+public class AnalyticsController {
     private final AnalyticsService analyticsService;
 
-    public AnalyticsController(AnalyticsService analyticsService)
-    {
+    public AnalyticsController(AnalyticsService analyticsService) {
         this.analyticsService = analyticsService;
     }
 
@@ -45,12 +36,10 @@ public class AnalyticsController
             @ApiResponse(responseCode = "400", description = "Not found."),
             @ApiResponse(responseCode = "500", description = "Unexpected error.")
     })
-    public @ResponseBody ResponseEntity<AnalyticsResponseModel> getWordCountByWord(@PathVariable @NotEmpty String word)
-    {
+    public @ResponseBody ResponseEntity<AnalyticsResponseModel> getWordCountByWord(@PathVariable @NotEmpty String word) {
         final Optional<AnalyticsResponseModel> response = analyticsService.getWordAnalytics(word);
 
-        if (response.isPresent())
-        {
+        if (response.isPresent()) {
             log.info("Analytics data returned with ID {}", response.get().getId());
             return ResponseEntity.ok(response.get());
         }

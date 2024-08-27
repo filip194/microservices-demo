@@ -1,24 +1,21 @@
 package com.microservices.demo.elastic.query.service.security;
 
+import com.microservices.demo.elastic.query.service.business.QueryUserService;
+import com.microservices.demo.elastic.query.service.transformer.UserPermissionsToUserDetailTransformer;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.microservices.demo.elastic.query.service.business.QueryUserService;
-import com.microservices.demo.elastic.query.service.transformer.UserPermissionsToUserDetailTransformer;
-
 // UserDetailsService is also from Spring core library
 
 @Service
-public class TwitterQueryUserDetailsService implements UserDetailsService
-{
+public class TwitterQueryUserDetailsService implements UserDetailsService {
     private final QueryUserService queryUserService;
     private final UserPermissionsToUserDetailTransformer userPermissionsToUserDetailTransformer;
 
     public TwitterQueryUserDetailsService(QueryUserService queryUserService,
-            UserPermissionsToUserDetailTransformer userPermissionsToUserDetailTransformer)
-    {
+                                          UserPermissionsToUserDetailTransformer userPermissionsToUserDetailTransformer) {
         this.queryUserService = queryUserService;
         this.userPermissionsToUserDetailTransformer = userPermissionsToUserDetailTransformer;
     }
@@ -27,8 +24,7 @@ public class TwitterQueryUserDetailsService implements UserDetailsService
     // the username by adding authorities and permissions we want to include
     // NOTE: that we will already load the authorities from JWT, and here we will only fetch object with the permissions
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
-    {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return queryUserService
                 .findAllPermissionsByUsername(username)
                 .map(userPermissionsToUserDetailTransformer::getUserDetails)

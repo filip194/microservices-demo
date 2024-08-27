@@ -1,12 +1,6 @@
 package com.microservices.demo.elastic.query.service.security;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.microservices.demo.elastic.query.service.Constants;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,10 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import com.microservices.demo.elastic.query.service.Constants;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class TwitterQueryUserJwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
-{
+public class TwitterQueryUserJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private static final String REALM_ACCESS_CLAIM = "realm_access";
     private static final String ROLES_CLAIM = "roles";
     private static final String SCOPE_CLAIM = "scope";
@@ -29,17 +23,15 @@ public class TwitterQueryUserJwtConverter implements Converter<Jwt, AbstractAuth
 
     private final TwitterQueryUserDetailsService twitterQueryUserDetailsService;
 
-    public TwitterQueryUserJwtConverter(TwitterQueryUserDetailsService twitterQueryUserDetailsService)
-    {
+    public TwitterQueryUserJwtConverter(TwitterQueryUserDetailsService twitterQueryUserDetailsService) {
         this.twitterQueryUserDetailsService = twitterQueryUserDetailsService;
     }
 
     @Override
-    public AbstractAuthenticationToken convert(Jwt jwt)
-    {
+    public AbstractAuthenticationToken convert(Jwt jwt) {
         final Collection<GrantedAuthority> authoritiesFromJwt = getAuthoritiesFromJwt(jwt);
         return Optional.ofNullable(
-                twitterQueryUserDetailsService.loadUserByUsername(jwt.getClaimAsString(USERNAME_CLAIM)))
+                        twitterQueryUserDetailsService.loadUserByUsername(jwt.getClaimAsString(USERNAME_CLAIM)))
                 .map(userDetails -> {
                     ((TwitterQueryUser) userDetails).setAuthorities(authoritiesFromJwt);
                     return new UsernamePasswordAuthenticationToken(userDetails, Constants.NA, authoritiesFromJwt);
@@ -47,28 +39,24 @@ public class TwitterQueryUserJwtConverter implements Converter<Jwt, AbstractAuth
                 .orElseThrow(() -> new BadCredentialsException("User could not be found"));
     }
 
-    private Collection<GrantedAuthority> getAuthoritiesFromJwt(Jwt jwt)
-    {
+    private Collection<GrantedAuthority> getAuthoritiesFromJwt(Jwt jwt) {
         return getCombinedAuthorities(jwt).stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
     // combine results from getRoles and getScopes
-    private Collection<String> getCombinedAuthorities(Jwt jwt)
-    {
+    private Collection<String> getCombinedAuthorities(Jwt jwt) {
         final Collection<String> authorities = getRoles(jwt);
         authorities.addAll(getScopes(jwt));
         return authorities;
     }
 
     @SuppressWarnings("unchecked")
-    private Collection<String> getRoles(Jwt jwt)
-    {
+    private Collection<String> getRoles(Jwt jwt) {
         final Object roles = ((Map<String, Object>) jwt.getClaims().get(REALM_ACCESS_CLAIM)).get(ROLES_CLAIM);
 
-        if (roles instanceof Collection)
-        {
+        if (roles instanceof Collection) {
             return ((Collection<String>) roles).stream()
                     .map(authority -> DEFAULT_ROLE_PREFIX + authority.toUpperCase())
                     .collect(Collectors.toList());
@@ -76,12 +64,10 @@ public class TwitterQueryUserJwtConverter implements Converter<Jwt, AbstractAuth
         return Collections.emptyList();
     }
 
-    private Collection<String> getScopes(Jwt jwt)
-    {
+    private Collection<String> getScopes(Jwt jwt) {
         final Object scopes = jwt.getClaims().get(SCOPE_CLAIM);
 
-        if (scopes instanceof String)
-        {
+        if (scopes instanceof String) {
             return Arrays.stream(((String) scopes).split(SCOPE_SEPARATOR))
                     .map(authority -> DEFAULT_SCOPE_PREFIX + authority.toUpperCase())
                     .collect(Collectors.toList());

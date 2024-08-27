@@ -4,7 +4,6 @@ import com.microservices.demo.elastic.query.web.client.common.model.ElasticQuery
 import com.microservices.demo.elastic.query.web.client.common.model.ElasticQueryWebClientRequestModel;
 
 @FunctionalInterface
-public interface ElasticQueryWebClient
-{
+public interface ElasticQueryWebClient {
     ElasticQueryWebClientAnalyticsResponseModel getDataByText(ElasticQueryWebClientRequestModel requestModel);
 }

@@ -1,13 +1,10 @@
 package com.microservices.demo.elastic.query.web.client.security;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,14 +15,17 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Configuration
 //@EnableWebSecurity // should be removed if using spring-boot-starter-oauth2-client
-public class WebSecurityConfig
-{
+public class WebSecurityConfig {
     private static final String GROUPS_CLAIM = "groups";
     private static final String ROLE_PREFIX = "ROLE_";
 
@@ -35,13 +35,11 @@ public class WebSecurityConfig
     @Value("${security.logout-success-url}")
     private String logoutSuccessUrl;
 
-    public WebSecurityConfig(ClientRegistrationRepository clientRegistrationRepository)
-    {
+    public WebSecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
 
-    OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler()
-    {
+    OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
         final OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(
                 clientRegistrationRepository);
         successHandler.setPostLogoutRedirectUri(logoutSuccessUrl);
@@ -49,24 +47,44 @@ public class WebSecurityConfig
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
-    {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .anyRequest()
-                .fullyAuthenticated()
-                .and()
-                .logout()
-                .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                .and()
-                .oauth2Client()
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userAuthoritiesMapper(userAuthoritiesMapper());
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
+                        .requestMatchers(new AntPathRequestMatcher("/"))
+                        .permitAll()
+                        .anyRequest().authenticated()
+                )
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                        .logoutSuccessHandler(oidcLogoutSuccessHandler())
+                )
+                .oauth2Client(Customizer.withDefaults())
+                .oauth2Login(httpSecurityOAuth2ClientConfigurer -> httpSecurityOAuth2ClientConfigurer
+                        .userInfoEndpoint(Customizer.withDefaults())
+                );
+        // userAuthoritiesMapper is replaced with public bean GrantedAuthoritiesMapper userAuthoritiesMapper() and
+        // will be auto-recognized and injected
         return http.build();
     }
+
+//    DEPRECATED: Spring 6 security loses and() method and replaces it with Customizers
+//    {
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/").permitAll()
+//                .anyRequest()
+//                .fullyAuthenticated()
+//                .and()
+//                .logout()
+//                .logoutSuccessHandler(oidcLogoutSuccessHandler())
+//                .and()
+//                .oauth2Client()
+//                .and()
+//                .oauth2Login()
+//                .userInfoEndpoint()
+//                .userAuthoritiesMapper(userAuthoritiesMapper());
+//        return http.build();
+//    }
 
 //    DEPRECATED: extends WebSecurityConfigurerAdapter
 //    @Override
@@ -86,7 +104,7 @@ public class WebSecurityConfig
 //                .oauth2Login()
 //                .userInfoEndpoint()
 //                .userAuthoritiesMapper(userAuthoritiesMapper());
-        // REMOVED AS WE ARE NOT USING IN-MEMORY AUTHENTICATION ANYMORE
+    // REMOVED AS WE ARE NOT USING IN-MEMORY AUTHENTICATION ANYMORE
 //                .httpBasic()
 //                .and()
 //                .authorizeRequests()
@@ -104,16 +122,15 @@ public class WebSecurityConfig
 //    }
 
     // customize granted authorities with custom mapper
-    private GrantedAuthoritiesMapper userAuthoritiesMapper()
-    {
+    @Bean
+    public GrantedAuthoritiesMapper userAuthoritiesMapper() {
         // map our authorities to spring security authorities, so we can do authorization logic here in client also
         // THIS WAY, AUTHENTICATED USER WILL HAVE ALL THE GROUPS FROM KEYCLOAK MAPPED TO ROLE_ AUTHORITIES IN SPRING CONTEXT
         return (authorities -> {
             final Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
-                if (authority instanceof OidcUserAuthority)
-                {
+                if (authority instanceof OidcUserAuthority) {
                     final OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
                     final OidcIdToken oidcIdToken = oidcUserAuthority.getIdToken();
                     log.info("Username from ID token: {}", oidcIdToken.getPreferredUsername());

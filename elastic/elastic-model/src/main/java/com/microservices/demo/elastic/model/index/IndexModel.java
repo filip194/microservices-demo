@@ -1,7 +1,6 @@
 package com.microservices.demo.elastic.model.index;
 
 @FunctionalInterface
-public interface IndexModel
-{
+public interface IndexModel {
     String getId();
 }

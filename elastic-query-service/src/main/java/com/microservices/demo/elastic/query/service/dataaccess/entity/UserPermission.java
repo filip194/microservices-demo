@@ -1,17 +1,15 @@
 package com.microservices.demo.elastic.query.service.dataaccess.entity;
 
-import java.util.UUID;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Entity
 @Data
-public class UserPermission
-{
+public class UserPermission {
     @NotNull
     @Id
     private UUID id;

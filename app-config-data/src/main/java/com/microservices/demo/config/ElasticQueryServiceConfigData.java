@@ -1,15 +1,13 @@
 package com.microservices.demo.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import lombok.Data;
 
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "elastic-query-service")
-public class ElasticQueryServiceConfigData
-{
+public class ElasticQueryServiceConfigData {
     private String version;
     private String customAudience;
     private Long backPressureDelayMs;
@@ -18,8 +16,7 @@ public class ElasticQueryServiceConfigData
     private Query queryFromAnalyticsDatabase;
 
     @Data
-    public static class WebClient
-    {
+    public static class WebClient {
         private Integer connectTimeoutMs;
         private Integer readTimeoutMs;
         private Integer writeTimeoutMs;
@@ -30,8 +27,7 @@ public class ElasticQueryServiceConfigData
     }
 
     @Data
-    public static class Query
-    {
+    public static class Query {
         private String method;
         private String accept;
         private String uri;

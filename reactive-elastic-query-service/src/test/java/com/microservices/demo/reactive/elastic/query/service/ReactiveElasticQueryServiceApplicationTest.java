@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ReactiveElasticQueryServiceApplicationTest
-{
+class ReactiveElasticQueryServiceApplicationTest {
     @Test
-    public void contextLoads()
-    {
+    public void contextLoads() {
     }
 }

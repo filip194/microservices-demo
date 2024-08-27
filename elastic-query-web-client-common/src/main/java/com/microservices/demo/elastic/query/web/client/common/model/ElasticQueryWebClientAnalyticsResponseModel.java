@@ -1,11 +1,11 @@
 package com.microservices.demo.elastic.query.web.client.common.model;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * In ElasticQueryWebClientAnalyticsResponseModel class in the web-client, please rename the field
@@ -18,8 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticQueryWebClientAnalyticsResponseModel
-{
+public class ElasticQueryWebClientAnalyticsResponseModel {
     private List<ElasticQueryWebClientResponseModel> elasticQueryServiceResponseModels;
     private Long wordCount;
 }

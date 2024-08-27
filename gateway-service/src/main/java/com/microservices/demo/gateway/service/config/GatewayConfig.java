@@ -1,29 +1,25 @@
 package com.microservices.demo.gateway.service.config;
 
-import java.time.Duration;
-import java.util.Objects;
-
+import com.microservices.demo.config.GatewayServiceConfigData;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.microservices.demo.config.GatewayServiceConfigData;
-
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
-import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.util.Objects;
+
 @Configuration
-public class GatewayConfig
-{
+public class GatewayConfig {
     private static final String HEADER_FOR_KEY_RESOLVER = "Authorization";
     private final GatewayServiceConfigData gatewayServiceConfigData;
 
-    public GatewayConfig(GatewayServiceConfigData gatewayServiceConfigData)
-    {
+    public GatewayConfig(GatewayServiceConfigData gatewayServiceConfigData) {
         this.gatewayServiceConfigData = gatewayServiceConfigData;
     }
 
@@ -34,8 +30,7 @@ public class GatewayConfig
     // so, we will use the 'Authorization' header here to apply the filtering, so that different clients won't use each
     // other's tokens
     @Bean(name = "authHeaderResolver") // key resolver name set up in config-client-gateway.yml config
-    public KeyResolver userKeyResolver()
-    {
+    public KeyResolver userKeyResolver() {
         return exchange -> Mono.just(
                 Objects.requireNonNull(exchange.getRequest().getHeaders().getFirst(HEADER_FOR_KEY_RESOLVER)));
     }
@@ -48,8 +43,7 @@ public class GatewayConfig
     // first set the timeLimiterConfig, to set a timeout duration for the operations on circuit breaker
     // this is to prevent waiting indefinitely
     @Bean
-    public Customizer<ReactiveResilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer()
-    {
+    public Customizer<ReactiveResilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer() {
         return reactiveResilience4JCircuitBreakerFactory -> reactiveResilience4JCircuitBreakerFactory.configureDefault(
                 id -> new Resilience4JConfigBuilder(id).timeLimiterConfig(TimeLimiterConfig.custom()
                                 .timeoutDuration(Duration.ofMillis(gatewayServiceConfigData.getTimeoutMs())).build())

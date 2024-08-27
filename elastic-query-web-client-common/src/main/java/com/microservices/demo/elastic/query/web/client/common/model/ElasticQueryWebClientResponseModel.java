@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElasticQueryWebClientResponseModel
-{
+public class ElasticQueryWebClientResponseModel {
     private String id;
     private Long userId;
     private String text;

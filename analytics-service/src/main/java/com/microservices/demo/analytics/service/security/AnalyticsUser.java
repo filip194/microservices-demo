@@ -1,66 +1,56 @@
 package com.microservices.demo.analytics.service.security;
 
-import java.util.Collection;
-
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import static com.microservices.demo.analytics.service.Constants.NA;
+import java.util.Collection;
 
-import lombok.Builder;
-import lombok.Getter;
+import static com.microservices.demo.analytics.service.Constants.NA;
 
 @Builder
 @Getter
-public class AnalyticsUser implements UserDetails
-{
+public class AnalyticsUser implements UserDetails {
     private String username;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities)
-    {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
-    {
-        return authorities;
-    }
-
-    @Override
-    public String getPassword()
-    {
+    public String getPassword() {
         return NA;
     }
 
     @Override
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
     @Override
-    public boolean isAccountNonExpired()
-    {
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked()
-    {
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired()
-    {
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return true;
     }
 }

@@ -1,12 +1,5 @@
 package com.microservices.demo.analytics.service.security;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -16,11 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import static com.microservices.demo.analytics.service.Constants.NA;
 
 
-public class AnalyticsUserJwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
-{
+public class AnalyticsUserJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private static final String REALM_ACCESS_CLAIM = "realm_access";
     private static final String ROLES_CLAIM = "roles";
     private static final String SCOPE_CLAIM = "scope";
@@ -31,14 +26,12 @@ public class AnalyticsUserJwtConverter implements Converter<Jwt, AbstractAuthent
 
     private final AnalyticsUserDetailsService analyticsUserDetailsService;
 
-    public AnalyticsUserJwtConverter(AnalyticsUserDetailsService analyticsUserDetailsService)
-    {
+    public AnalyticsUserJwtConverter(AnalyticsUserDetailsService analyticsUserDetailsService) {
         this.analyticsUserDetailsService = analyticsUserDetailsService;
     }
 
     @Override
-    public AbstractAuthenticationToken convert(@NonNull Jwt jwt)
-    {
+    public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
         final Collection<GrantedAuthority> authoritiesFromJwt = getAuthoritiesFromJwt(jwt);
         return Optional.ofNullable(
                         analyticsUserDetailsService.loadUserByUsername(jwt.getClaimAsString(USERNAME_CLAIM)))
@@ -49,23 +42,20 @@ public class AnalyticsUserJwtConverter implements Converter<Jwt, AbstractAuthent
                 .orElseThrow(() -> new BadCredentialsException("User could not be found!"));
     }
 
-    private Collection<GrantedAuthority> getAuthoritiesFromJwt(Jwt jwt)
-    {
+    private Collection<GrantedAuthority> getAuthoritiesFromJwt(Jwt jwt) {
         return getCombinedAuthorities(jwt).stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
-    private Collection<String> getCombinedAuthorities(Jwt jwt)
-    {
+    private Collection<String> getCombinedAuthorities(Jwt jwt) {
         final Collection<String> authorities = getRoles(jwt);
         authorities.addAll(getScopes(jwt));
         return authorities;
     }
 
     @SuppressWarnings("unchecked")
-    private Collection<String> getRoles(Jwt jwt)
-    {
+    private Collection<String> getRoles(Jwt jwt) {
         final Object roles = ((Map<String, Object>) jwt.getClaims().get(REALM_ACCESS_CLAIM)).get(ROLES_CLAIM);
         if (roles instanceof Collection) {
             return ((Collection<String>) roles).stream()
@@ -75,11 +65,9 @@ public class AnalyticsUserJwtConverter implements Converter<Jwt, AbstractAuthent
         return Collections.emptyList();
     }
 
-    private Collection<String> getScopes(Jwt jwt)
-    {
+    private Collection<String> getScopes(Jwt jwt) {
         final Object scopes = jwt.getClaims().get(SCOPE_CLAIM);
-        if (scopes instanceof String)
-        {
+        if (scopes instanceof String) {
             return Arrays.stream(((String) scopes).split(SCOPE_SEPARATOR))
                     .map(authority -> DEFAULT_SCOPE_PREFIX + authority.toUpperCase())
                     .collect(Collectors.toList());

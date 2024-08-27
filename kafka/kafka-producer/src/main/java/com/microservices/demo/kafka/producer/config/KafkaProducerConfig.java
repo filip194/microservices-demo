@@ -1,9 +1,7 @@
 package com.microservices.demo.kafka.producer.config;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.microservices.demo.config.KafkaConfigData;
+import com.microservices.demo.config.KafkaProducerConfigData;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +10,9 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import com.microservices.demo.config.KafkaConfigData;
-import com.microservices.demo.config.KafkaProducerConfigData;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * First we will create KafkaTemplate<K,V> bean and use it to send messages to Kafka.
@@ -24,20 +23,17 @@ import com.microservices.demo.config.KafkaProducerConfigData;
  * @param <V> value
  */
 @Configuration
-public class KafkaProducerConfig<K extends Serializable, V extends SpecificRecordBase>
-{
+public class KafkaProducerConfig<K extends Serializable, V extends SpecificRecordBase> {
     private final KafkaConfigData kafkaConfigData;
     private final KafkaProducerConfigData kafkaProducerConfigData;
 
-    public KafkaProducerConfig(KafkaConfigData kafkaConfigData, KafkaProducerConfigData kafkaProducerConfigData)
-    {
+    public KafkaProducerConfig(KafkaConfigData kafkaConfigData, KafkaProducerConfigData kafkaProducerConfigData) {
         this.kafkaConfigData = kafkaConfigData;
         this.kafkaProducerConfigData = kafkaProducerConfigData;
     }
 
     @Bean
-    public Map<String, Object> producerConfig()
-    {
+    public Map<String, Object> producerConfig() {
         final Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigData.getBootstrapServers());
         props.put(kafkaConfigData.getSchemaRegistryUrlKey(), kafkaConfigData.getSchemaRegistryUrl());
@@ -54,8 +50,7 @@ public class KafkaProducerConfig<K extends Serializable, V extends SpecificRecor
     }
 
     @Bean
-    public ProducerFactory<K, V> producerFactory()
-    {
+    public ProducerFactory<K, V> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
@@ -63,8 +58,7 @@ public class KafkaProducerConfig<K extends Serializable, V extends SpecificRecor
     // KafkaTemplate is used to send messages to Kafka, it is actually an upper class of KafkaProducer, and
     // it contains methods to send data to Kafka easily.
     @Bean
-    public KafkaTemplate<K, V> kafkaTemplate()
-    {
+    public KafkaTemplate<K, V> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
